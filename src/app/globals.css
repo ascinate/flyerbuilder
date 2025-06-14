@@ -1,0 +1,240 @@
+@import "tailwindcss";
+
+/* :root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+} */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+
+
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+   background-color: #e3e3e3 !important;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+li {
+  list-style: none;
+}
+
+:root {
+  --theme-btn: #3f59f6;
+  --gray-theme-color: #9e9e9e;
+  --white-color: #ffffff;
+  --black-color: #000000;
+}
+
+
+/* :::::::::::navbar start:::::::::::: */
+
+.nav-color {
+  background-color: var(--black-color);
+
+  & a {
+    color: var(--white-color);
+  }
+}
+
+.navLogo {
+  font-size: 32px;
+}
+
+.nav-btn {
+  padding: 30px 6px;
+
+  &:nth-child(1) {
+    color: var(--white-color);
+    border: 1px solid var(--white-color);
+  }
+
+  &:nth-child(2) {
+    margin-left: 20px;
+  }
+}
+
+/* ::::::::::navbar end:::::::::::*/
+
+
+/* body start */
+.section-body{
+ 
+}
+/* sub menu:::::::::: */
+.design-menu {
+  background-color: var(--white-color);
+  padding: 6px 20px;
+  border: 1px solid lightgray;
+
+  & span {
+    color: var(--gray-theme-color);
+    margin-left: 10px;
+    font-weight: 600;
+  }
+}
+
+
+.design-sub-menu {
+  display: flex;
+  align-items: center;
+}
+.design-sub-menu button{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 10px;
+}
+
+
+/* canvas area */
+.design-area{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 180px);
+
+
+}
+textarea{
+
+  border:1px solid #000000;
+
+}
+.design-area-canvas{
+    background-color: var(--white-color);
+  width: 600px;
+  height: 300px;
+}
+
+
+/* design-footer */
+.design-footer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  background-color: var(--white-color);
+  border: 1px solid lightgray;
+}
+.footer-btn{
+
+  border: 1px solid black !important;
+  color: black;
+}
+
+/* text-alignment */
+.text-alignment{
+  height: 50px;
+  width: 50px;
+  border: 1px solid lightgray;
+  background-color: var(--white-color);
+}
+.font-size-input{
+  background-color: var(--white-color);
+  padding: 10px 2px;
+  text-align: center;
+}
+.size-btn{
+  background-color: var(--white-color);
+  padding: 10px 20px;
+  border: 1px solid lightgray;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+}
+.btn-decrease{
+  border-radius: 8px 0 0 8px;
+  -webkit-border-radius: 8px 0 0 8px;
+  -moz-border-radius: 8px 0 0 8px;
+  -ms-border-radius: 8px 0 0 8px;
+  -o-border-radius: 8px 0 0 8px;
+}
+
+.btn-increase{ border-radius: 0 8px 8px 0; -webkit-border-radius: 0 8px 8px 0; -moz-border-radius: 0 8px 8px 0; -ms-border-radius: 0 8px 8px 0; -o-border-radius: 0 8px 8px 0;
+}
+.text-color-input{
+  width: 50px;
+  height: 50px;
+  border-radius: 12px ;
+  -webkit-border-radius: 12px ;
+  -moz-border-radius: 12px ;
+  -ms-border-radius: 12px ;
+  -o-border-radius: 12px ;
+}
+.col-lg-8,
+.col-lg-4{
+  padding: 0 !important;
+}
+.tabs-menu{
+  height: calc(100vh - 64px);  
+  /* resize: vertical;
+  overflow: scroll; */
+  color: #000000 !important;
+  background-color: var(--white-color);
+  border: 1px solid lightgray;
+  & button{
+    text-align: center;
+    color: var(--black-color);
+    border-bottom: 1px solid var(--gray-theme-color);
+    padding-block: 15px;
+    border-radius: 0px !important;
+    & svg {
+      margin: auto;
+      
+    }
+  }
+  
+}
+
+
+/* template */
+.template-ul{
+  padding: 0;
+  & li {
+    margin-block:20px ;
+  }
+}
+.template-search-input{
+  background-color: var(--white-color);
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+.template-image{
+  margin-top: 20px;
+  
+}
+/* body end  */
