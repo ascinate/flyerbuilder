@@ -124,9 +124,31 @@ textarea {
     height: 300px;
   }
 }
+.uploadedPngImage{
+  overflow: hidden;
+}
 
-
-
+.uploaded-png-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  z-index: 65;
+  overflow: hidden;
+}
+.uploaded-png-image2{
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  z-index: 65;
+}
 
 .design-footer {
   display: flex;
@@ -273,3 +295,116 @@ textarea {
   width: 250px;
   height: 100px;
 }
+
+.CurrentImage{
+  margin-top: 10px;
+min-width: 200px;
+min-height: 125px;
+border: 1px solid gray;
+}
+
+
+.uploadedImagesContainer {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.uploadedPngImage {
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.previewCurrentImage {
+  margin-top: 100px;
+}
+
+.CurrentImage {
+  border: 1px solid #999;
+  padding: 5px;
+  border-radius: 6px;
+}
+.preview-list{
+  width: 100px;
+}
+.delete-button{
+  width: 30px;
+  height: 30px;
+  margin: auto;
+background-color: red;
+color: #ffffff;
+font-size: 24px;
+border-radius: 50%;
+}
+.image-box{
+  position: absolute;
+  z-index: 9900;
+}
+
+
+
+/* canvas start*/
+.editor-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.editor-toolbar {
+  width: 12rem;
+
+  padding: 1rem;
+  
+}
+
+.add-text-btn {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+}
+
+.editor-canvas {
+  flex: 1;
+  position: relative;
+  background-color: #e5e7eb;
+  overflow: hidden;
+}
+
+.editor-box {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.editor-textarea {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  resize: none;
+  outline: none;
+  border: 1px dashed #6b7280;
+  padding: 4px;
+  font-size: 18px;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.75rem;
+  background-color: #ef4444;
+  color: white;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+}
+
+
+
+/* canvas end */

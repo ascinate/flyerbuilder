@@ -1,12 +1,11 @@
 'use client'
 
 import Image from "next/image";
-
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from "react";
 import Template from "./component/Template";
 import Navbar from "./component/Navbar";
+import { Rnd } from "react-rnd";
 export default function Page() {
 
 
@@ -14,6 +13,7 @@ export default function Page() {
   const [textStyles, setTextStyles] = useState({
     input1: {
       alignment: 'left',
+      text: "pritam",
       textSize: 24,
       textColor: '#000000',
       textColorTwo: '#000000',
@@ -31,16 +31,46 @@ export default function Page() {
 
   });
 
-  const [uploadedImage, setUploadedImage] = useState(null);
 
+  const [images, setImages] = useState([
+    {
+      id: 1,
+      src: "/pngImg.png",
+      width: 80,
+      height: 50,
+    },
+    {
+      id: 2,
+      src: "/pngImg.png",
+      width: 100,
+      height: 50,
+    },
+  ]);
 
-  const handleImageUpload = (e) => {
+  const handleUpload = (e) => {
     const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      const imageUrl = URL.createObjectURL(file);
-      setUploadedImage(imageUrl);
-    }
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const newImage = {
+        id: Date.now(),
+        src: reader.result,
+        width: 100,
+        height: 60,
+      };
+      setImages((prev) => [...prev, newImage]);
+    };
+    reader.readAsDataURL(file);
   };
+
+  const deleteImage = (id) => {
+    setImages((prev) => prev.filter((img) => img.id !== id));
+  };
+
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [upoloadPngImage, setUploadedPngImage] = useState(null);
+
 
 
   useEffect(() => {
@@ -172,12 +202,70 @@ export default function Page() {
     setUploadedImage(null);
   };
 
+
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const imageUrl = URL.createObjectURL(file);
+      setUploadedImage(imageUrl);
+    }
+  };
+
+
+
+  const handlePngImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const imageUrl = URL.createObjectURL(file);
+      setUploadedPngImage(imageUrl);
+    }
+  }
+
+
+  const [elements, setElements] = useState([
+    {
+      id: 1,
+      type: "text",
+      content: "Edit me!",
+      x: 100,
+      y: 100,
+      width: 200,
+      height: 100,
+    },
+  ]);
+
+  const [selectedId, setSelectedId] = useState(null);
+
+  const handleTextChange = (id, newText) => {
+    setElements((prev) =>
+      prev.map((el) => (el.id === id ? { ...el, content: newText } : el))
+    );
+  };
+
+  const addTextElement = () => {
+    const newId = elements.length + 1;
+    setElements((prev) => [
+      ...prev,
+      {
+        id: newId,
+        type: "text",
+        content: "New Text",
+        x: 150,
+        y: 150,
+        width: 200,
+        height: 100,
+      },
+    ]);
+  };
+
+  const deleteElement = (id) => {
+    setElements((prev) => prev.filter((el) => el.id !== id));
+  };
+
   return (
     <>
       <Navbar />
-
-
-
       <main className=''>
         <section className="section-body">
 
@@ -198,20 +286,16 @@ export default function Page() {
                 </div>
                 <div className="design-area">
                   <div className="design-area-canvas d-flex flex-col justify-content-center align-content-center">
-
-
                     <input
-
                       style={{
                         fontSize: `${textStyles.input1.textSize}px`,
                         textAlign: textStyles.input1.alignment,
                         color: textStyles.input1.textColor,
                         textTransform: textStyles.input1.textTransform,
-
                       }}
                       className="canavas_input"
+                       value={textStyles.input1.text}
                     />
-
                     <input
                       type="text"
                       style={{
@@ -231,6 +315,66 @@ export default function Page() {
                         />
                       )}
                     </div>
+
+
+                    <div className="main-image-list">
+                      {images.map((img) => (
+                        <div key={img.id} className="image-box">
+                          <Image src={img.src} width={img.width} height={img.height} alt="MainImage" />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Drag and drop */}
+
+
+                    <div className="editor-canvas">
+                      {elements.map((el) => (
+                        <Rnd
+                          key={el.id}
+                          size={{ width: el.width, height: el.height }}
+                          position={{ x: el.x, y: el.y }}
+                          onDragStop={(e, d) => {
+                            setElements((prev) =>
+                              prev.map((item) =>
+                                item.id === el.id ? { ...item, x: d.x, y: d.y } : item
+                              )
+                            );
+                          }}
+                          onResizeStop={(e, direction, ref, delta, position) => {
+                            setElements((prev) =>
+                              prev.map((item) =>
+                                item.id === el.id
+                                  ? {
+                                    ...item,
+                                    width: parseInt(ref.style.width),
+                                    height: parseInt(ref.style.height),
+                                    ...position,
+                                  }
+                                  : item
+                              )
+                            );
+                          }}
+                          onClick={() => setSelectedId(el.id)}
+                          bounds="parent"
+                        >
+                          <div className="editor-box">
+                            <textarea
+                              className="editor-textarea"
+                              value={el.content}
+                              onChange={(e) => handleTextChange(el.id, e.target.value)}
+                            />
+                            <button
+                              onClick={() => deleteElement(el.id)}
+                              className="delete-btn"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        </Rnd>
+                      ))}
+                    </div>
+                    {/* Drag and drop */}
 
                   </div>
                 </div>
@@ -341,9 +485,53 @@ export default function Page() {
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20.4668 8.69379L20.7134 8.12811C21.1529 7.11947 21.9445 6.31641 22.9323 5.87708L23.6919 5.53922C24.1027 5.35653 24.1027 4.75881 23.6919 4.57612L22.9748 4.25714C21.9616 3.80651 21.1558 2.97373 20.7238 1.93083L20.4706 1.31953C20.2942 0.893489 19.7058 0.893489 19.5293 1.31953L19.2761 1.93083C18.8442 2.97373 18.0384 3.80651 17.0252 4.25714L16.308 4.57612C15.8973 4.75881 15.8973 5.35653 16.308 5.53922L17.0677 5.87708C18.0555 6.31641 18.8471 7.11947 19.2866 8.12811L19.5331 8.69379C19.7136 9.10792 20.2864 9.10792 20.4668 8.69379ZM2 4C2 3.44772 2.44772 3 3 3H14V5H4V19H20V11H22V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4ZM7 8H17V11H15V10H13V14H14.5V16H9.5V14H11V10H9V11H7V8Z"></path></svg>
                         </button>
                       </div>
+
+                      <div className="">
+                        <div className="editor-toolbar">
+                          <button onClick={addTextElement} className="add-text-btn">
+                            Add Text
+                          </button>
+                        </div>
+                      </div>
+
+
+
                     </div>
                     <div className="tab-pane " id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                      <p>Image</p>
+                      <div className="image-upload">
+                        <div className="upload-section">
+                          <input type="file" accept="image/*" onChange={handleUpload} />
+                        </div>
+
+                        {upoloadPngImage && (
+                          <div className="image-preview">
+                            <img src={upoloadPngImage} alt="Preview" className="preview-image" />
+                            <button className="remove-btn" onClick={handleRemoveImage}>
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"></path></svg>
+                            </button>
+                          </div>
+                        )}
+
+
+
+
+                        <div className="previewCurrentImage">
+                          {images.length === 0 ? (
+                            <p>No preview images.</p>
+                          ) : (
+                            <ul className="preview-list">
+                              {images.map((img) => (
+                                <li key={img.id} className="preview-item">
+                                  <Image src={img.src} width={img.width} height={img.height} alt="Preview" />
+                                  <button className="delete-button" onClick={() => deleteImage(img.id)}>
+                                    X
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      </div>
                     </div>
                     <div className="tab-pane " id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                       <input
@@ -367,6 +555,7 @@ export default function Page() {
                             </button>
                           </div>
                         )}
+
                       </div>
                     </div>
                   </div>
