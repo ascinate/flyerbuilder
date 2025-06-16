@@ -4,7 +4,6 @@ import Image from "next/image";
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { useEffect, useState } from "react";
 import Template from "./component/Template";
 import Navbar from "./component/Navbar";
