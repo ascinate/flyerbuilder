@@ -8,21 +8,40 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { useEffect, useState } from "react";
 import Template from "./component/Template";
 import Navbar from "./component/Navbar";
-import Text from "./component/Text";
 export default function Page() {
 
-  const [alignment, setAlignment] = useState('left');
-  const [alignmentTwo, setAlignmentTwo] = useState('left');
-  const [textSize, setTextSize] = useState(24);
-  const [textSizeTwo, setTextSizeTwo] = useState(24);
-  const [textColor, setTextColor] = useState('#000000');
-  const [textColorTwo, setTextColorTwo] = useState('#000000')
-  const [textTransform, setTextTransform] = useState("none")
-  const [textTransformTwo, setTextTransformTwo] = useState("none")
-  const [canvasBackgroundColor, setCanvasBackgroundColor] = useState('#ffffff');
 
 
-  
+  const [textStyles, setTextStyles] = useState({
+    input1: {
+      alignment: 'left',
+      textSize: 24,
+      textColor: '#000000',
+      textColorTwo: '#000000',
+      textTransform: 'none',
+      canvasBackgroundColor: '#E61E1E'
+    },
+    input2: {
+      alignment: 'left',
+      textSize: 24,
+      textColor: '#000000',
+      textColorTwo: '#000000',
+      textTransform: 'none',
+      canvasBackgroundColor: '#ffffff'
+    },
+
+  });
+
+  const [uploadedImage, setUploadedImage] = useState(null);
+
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const imageUrl = URL.createObjectURL(file);
+      setUploadedImage(imageUrl);
+    }
+  };
 
 
   useEffect(() => {
@@ -93,33 +112,77 @@ export default function Page() {
   ];
 
 
-  const handleIncrease = () => {
-    setTextSize(prev => prev + 1);
-  };
-   const handleIncreaseTwo = () => {
-    setTextSizeTwo(prev => prev + 1);
-  };
-
-  const handleDecrease = () => {
-    if (textSize > 1) {
-      setTextSize(prev => prev - 1);
-    }
-  };
-    const handleDecreaseTwo = () => {
-    if (textSize > 1) {
-      setTextSizeTwo(prev => prev - 1);
-    }
+  // You can pass 'input1' or 'input2' as needed
+  const handleIncrease = (inputKey = 'input1') => {
+    setTextStyles((prev) => ({
+      ...prev,
+      [inputKey]: {
+        ...prev[inputKey],
+        textSize: prev[inputKey].textSize + 1,
+      },
+    }));
   };
 
-  const handleInputChange = (e) => {
+  const handleDecrease = (inputKey = 'input1') => {
+    if (textStyles[inputKey].textSize > 1) {
+      setTextStyles((prev) => ({
+        ...prev,
+        [inputKey]: {
+          ...prev[inputKey],
+          textSize: prev[inputKey].textSize - 1,
+        },
+      }));
+    }
+  };
+
+  const handleInputChange = (e, inputKey = 'input1') => {
     const newSize = parseInt(e.target.value, 10);
-    if (!isNaN(newSize)) setTextSize(newSize);
+    if (!isNaN(newSize)) {
+      setTextStyles((prev) => ({
+        ...prev,
+        [inputKey]: {
+          ...prev[inputKey],
+          textSize: newSize,
+        },
+      }));
+    }
   };
 
-  const handleCapSamTextHandle = () => {
-    setTextTransform((prev) =>
-      prev === "uppercase" ? "lowercase" : "uppercase"
-    );
+  const handleCapSamTextHandle = (inputKey = 'input1') => {
+    setTextStyles((prev) => ({
+      ...prev,
+      [inputKey]: {
+        ...prev[inputKey],
+        textTransform:
+          prev[inputKey].textTransform === 'uppercase'
+            ? 'lowercase'
+            : 'uppercase',
+      },
+    }));
+  };
+
+  // Optional helper function
+  const updateInputStyle = (inputKey, property, value) => {
+    setTextStyles((prev) => ({
+      ...prev,
+      [inputKey]: {
+        ...prev[inputKey],
+        [property]: value,
+      },
+    }));
+  };
+
+  const updateTextStyle = (input, property, value) => {
+    setTextStyles((prevStyles) => ({
+      ...prevStyles,
+      [input]: { ...prevStyles[input], [property]: value },
+    }));
+  };
+
+
+
+  const handleRemoveImage = () => {
+    setUploadedImage(null);
   };
 
   return (
@@ -147,20 +210,46 @@ export default function Page() {
                   ))}
                 </div>
                 <div className="design-area">
-                  <div className="design-area-canvas d-flex flex-col justify-content-center align-content-center" style={{ background: canvasBackgroundColor, }}>
-                    <input
-                      className=""
-                      style={{ fontSize: `${textSize}px`, textAlign: alignment, color: textColor, textTransform: textTransform, }}
-                    />
-                    <input type="text"
-                      style={{ fontSize: `${textSizeTwo}px`, textAlign: alignmentTwo, color: textColorTwo, textTransform: textTransformTwo, }}
-                    />
-                  </div>
+                  <div className="design-area-canvas d-flex flex-col justify-content-center align-content-center">
 
+
+                    <input
+
+                      style={{
+                        fontSize: `${textStyles.input1.textSize}px`,
+                        textAlign: textStyles.input1.alignment,
+                        color: textStyles.input1.textColor,
+                        textTransform: textStyles.input1.textTransform,
+
+                      }}
+                      className="canavas_input"
+                    />
+
+                    <input
+                      type="text"
+                      style={{
+                        fontSize: `${textStyles.input2.textSize}px`,
+                        textAlign: textStyles.input2.alignment,
+                        color: textStyles.input2.textColorTwo,
+                      }}
+                      className="canavas_input"
+                    />
+
+                    <div className="uploadedImage" >
+                      {uploadedImage && (
+                        <img
+                          src={uploadedImage}
+                          alt="Uploaded"
+                          className="uploaded-image"
+                        />
+                      )}
+                    </div>
+
+                  </div>
                 </div>
                 <div className="design-footer">
-                  <button type="button" class="btn  footer-btn">Save progress</button>
-                  <button type="button" class="btn btn-primary nav-btn" download>Download</button>
+                  <button type="button" className="btn  footer-btn">Save progress</button>
+                  <button type="button" className="btn btn-primary nav-btn" download>Download</button>
                 </div>
               </div>
 
@@ -189,30 +278,82 @@ export default function Page() {
                       <Template />
                     </div>
                     <div className="tab-pane  " id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                      <Text
-                        alignment={alignment}
-                        setAlignment={setAlignment}
-                            alignmentTwo={alignmentTwo}
-                        setAlignmentTwo={setAlignmentTwo}
-                        textSize={textSize}
-                        setTextSize={setTextSize}
-                           textSizeTwo={textSizeTwo}
-                        setTextSizeTwo={setTextSizeTwo}
-                        textColor={textColor}
-                        setTextColor={setTextColor}
-                        textColorTwo={textColorTwo}
-                        setTextColorTwo={setTextColorTwo}
-                        textTransform={textTransform}
-                        setTextTransform={setTextTransform}
-                        textTransformTwo={textTransformTwo}
-                        setTextTransformTwo={setTextTransformTwo}
-                        handleCapSamTextHandle={handleCapSamTextHandle}
-                        handleIncrease={handleIncrease}
-                        handleDecrease={handleDecrease}
-                        handleIncreaseTwo={handleIncreaseTwo}
-                        handleDecreaseTwo={handleDecreaseTwo}
-                        handleInputChange={handleInputChange}
-                      />
+                      <div className="d-flex justify-content-between w-100">
+                        <button
+                          className="text-alignment"
+                          onClick={() =>
+                            setTextStyles((prev) => ({
+                              ...prev,
+                              input1: {
+                                ...prev.input1,
+                                alignment: 'left',
+                              },
+                            }))
+                          }
+                        >
+                          <Image src="/left.webp" width={40} height={40} alt="left align" />
+                        </button>
+
+                        <button
+                          className="text-alignment"
+                          onClick={() =>
+                            setTextStyles((prev) => ({
+                              ...prev,
+                              input1: {
+                                ...prev.input1,
+                                alignment: 'center',
+                              },
+                            }))
+                          }
+                        >
+                          <Image src="/center.webp" width={40} height={40} alt="center align" />
+                        </button>
+
+                        <button
+                          className="text-alignment"
+                          onClick={() =>
+                            setTextStyles((prev) => ({
+                              ...prev,
+                              input1: {
+                                ...prev.input1,
+                                alignment: 'right',
+                              },
+                            }))
+                          }
+                        >
+                          <Image src="/right.webp" width={40} height={40} alt="right align" />
+                        </button>
+                      </div>
+
+                      <div className="my-4 w-100">
+                        <button onClick={() => handleDecrease('input1')} className="size-btn btn-decrease">-</button>
+                        <input
+                          type="number"
+                          value={textStyles.input1.textSize}
+                          onChange={(e) => handleInputChange(e, 'input1')}
+                          style={{ width: "60px" }}
+                          className="font-size-input w-50"
+                        />
+                        <button className="size-btn btn-increase" onClick={() => handleIncrease('input1')}>+</button>
+                      </div>
+                      <div className="d-flex justify-content-around">
+                        <input
+                          type="color"
+                          value={textStyles.input2.textColor}
+                          onChange={(e) => updateTextStyle('input2', 'textColor', e.target.value)}
+                          className="text-color-input"
+                        />
+                        <input
+                          type="color"
+                          value={textStyles.input1.textColorTwo}
+                          onChange={(e) => updateTextStyle('input1', 'textColorTwo', e.target.value)}
+                          className="text-color-input"
+                        />
+
+                        <button className="size-btn" onClick={() => handleCapSamTextHandle('input1')}>
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20.4668 8.69379L20.7134 8.12811C21.1529 7.11947 21.9445 6.31641 22.9323 5.87708L23.6919 5.53922C24.1027 5.35653 24.1027 4.75881 23.6919 4.57612L22.9748 4.25714C21.9616 3.80651 21.1558 2.97373 20.7238 1.93083L20.4706 1.31953C20.2942 0.893489 19.7058 0.893489 19.5293 1.31953L19.2761 1.93083C18.8442 2.97373 18.0384 3.80651 17.0252 4.25714L16.308 4.57612C15.8973 4.75881 15.8973 5.35653 16.308 5.53922L17.0677 5.87708C18.0555 6.31641 18.8471 7.11947 19.2866 8.12811L19.5331 8.69379C19.7136 9.10792 20.2864 9.10792 20.4668 8.69379ZM2 4C2 3.44772 2.44772 3 3 3H14V5H4V19H20V11H22V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4ZM7 8H17V11H15V10H13V14H14.5V16H9.5V14H11V10H9V11H7V8Z"></path></svg>
+                        </button>
+                      </div>
                     </div>
                     <div className="tab-pane " id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
                       <p>Image</p>
@@ -220,11 +361,26 @@ export default function Page() {
                     <div className="tab-pane " id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                       <input
                         type="color"
-                        name="" id=""
-                        value={canvasBackgroundColor}
-                        onChange={(e) => setCanvasBackgroundColor(e.target.value)}
-                        className="text-color-input" />
-
+                        value={textStyles.input1.canvasBackgroundColor}
+                        onChange={(e) => updateInput1Style('canvasBackgroundColor', e.target.value)}
+                        className="text-color-input"
+                      />
+                      <div className="image-upload">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="image-upload-input"
+                          onChange={handleImageUpload}
+                        />
+                        {uploadedImage && (
+        <div className="image-preview">
+          <img src={uploadedImage} alt="Preview" className="preview-image" />
+          <button className="remove-btn" onClick={handleRemoveImage}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"></path></svg>
+          </button>
+        </div>
+      )}
+                      </div>
 
 
                     </div>

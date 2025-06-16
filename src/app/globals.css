@@ -39,7 +39,7 @@ body {
 
 body {
   font-family: "Inter", sans-serif;
-   background-color: #e3e3e3 !important;
+  background-color: #e3e3e3 !important;
 }
 
 a {
@@ -89,9 +89,8 @@ li {
 
 
 /* body start */
-.section-body{
- 
-}
+.section-body {}
+
 /* sub menu:::::::::: */
 .design-menu {
   background-color: var(--white-color);
@@ -110,7 +109,8 @@ li {
   display: flex;
   align-items: center;
 }
-.design-sub-menu button{
+
+.design-sub-menu button {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -119,7 +119,7 @@ li {
 
 
 /* canvas area */
-.design-area{
+.design-area {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -127,20 +127,35 @@ li {
 
 
 }
-textarea{
 
-  border:1px solid #000000;
+textarea {
+
+  border: 1px solid #000000;
 
 }
-.design-area-canvas{
-    background-color: var(--white-color);
+
+.design-area-canvas {
+  position: relative;
+  background-color: var(--white-color);
   width: 600px;
   height: 300px;
 }
+.uploadedImage {
+  position: absolute;
+  & img {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 600px;
+  height: 300px;
+  }
+}
+
 
 
 /* design-footer */
-.design-footer{
+.design-footer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -148,25 +163,28 @@ textarea{
   background-color: var(--white-color);
   border: 1px solid lightgray;
 }
-.footer-btn{
+
+.footer-btn {
 
   border: 1px solid black !important;
   color: black;
 }
 
 /* text-alignment */
-.text-alignment{
+.text-alignment {
   height: 50px;
   width: 50px;
   border: 1px solid lightgray;
   background-color: var(--white-color);
 }
-.font-size-input{
+
+.font-size-input {
   background-color: var(--white-color);
   padding: 10px 2px;
   text-align: center;
 }
-.size-btn{
+
+.size-btn {
   background-color: var(--white-color);
   padding: 10px 20px;
   border: 1px solid lightgray;
@@ -176,7 +194,8 @@ textarea{
   -ms-border-radius: 8px;
   -o-border-radius: 8px;
 }
-.btn-decrease{
+
+.btn-decrease {
   border-radius: 8px 0 0 8px;
   -webkit-border-radius: 8px 0 0 8px;
   -moz-border-radius: 8px 0 0 8px;
@@ -184,57 +203,101 @@ textarea{
   -o-border-radius: 8px 0 0 8px;
 }
 
-.btn-increase{ border-radius: 0 8px 8px 0; -webkit-border-radius: 0 8px 8px 0; -moz-border-radius: 0 8px 8px 0; -ms-border-radius: 0 8px 8px 0; -o-border-radius: 0 8px 8px 0;
+.btn-increase {
+  border-radius: 0 8px 8px 0;
+  -webkit-border-radius: 0 8px 8px 0;
+  -moz-border-radius: 0 8px 8px 0;
+  -ms-border-radius: 0 8px 8px 0;
+  -o-border-radius: 0 8px 8px 0;
 }
-.text-color-input{
+
+.text-color-input {
   width: 50px;
   height: 50px;
-  border-radius: 12px ;
-  -webkit-border-radius: 12px ;
-  -moz-border-radius: 12px ;
-  -ms-border-radius: 12px ;
-  -o-border-radius: 12px ;
+  border-radius: 12px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  -ms-border-radius: 12px;
+  -o-border-radius: 12px;
 }
+
 .col-lg-8,
-.col-lg-4{
+.col-lg-4 {
   padding: 0 !important;
 }
-.tabs-menu{
-  height: calc(100vh - 64px);  
+
+.tabs-menu {
+  height: calc(100vh - 64px);
   /* resize: vertical;
   overflow: scroll; */
   color: #000000 !important;
   background-color: var(--white-color);
   border: 1px solid lightgray;
-  & button{
+
+  & button {
     text-align: center;
     color: var(--black-color);
     border-bottom: 1px solid var(--gray-theme-color);
     padding-block: 15px;
     border-radius: 0px !important;
+
     & svg {
       margin: auto;
-      
+
     }
   }
-  
+
 }
 
 
 /* template */
-.template-ul{
+.template-ul {
   padding: 0;
+
   & li {
-    margin-block:20px ;
+    margin-block: 20px;
   }
 }
-.template-search-input{
+
+.template-search-input {
   background-color: var(--white-color);
   padding: 10px 20px;
   border-radius: 8px;
 }
-.template-image{
+
+.template-image {
   margin-top: 20px;
-  
+
 }
+
+
+/* background */
+.image-upload {
+  border: 5px solid rgb(148, 148, 148);
+  height: 50px;
+  width: 50px;
+}
+
+
+
+.canavas_input {
+  z-index: 99;
+}
+
+.remove-btn{
+  background-color: red;
+  border-radius: 50%;
+  & svg { 
+    color: var(--white-color);
+  }
+}
+.image-preview{
+  width: 250px;
+height: 100px;
+}
+.preview-image{
+width: 250px;
+height: 100px;
+}
+
 /* body end  */
