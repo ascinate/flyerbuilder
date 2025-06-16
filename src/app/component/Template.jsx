@@ -45,8 +45,6 @@ function Template() {
                                     </li>
                                 </ul>
                             </div>
-
-
                         </div>
                         <div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
                     </div>
@@ -56,5 +54,4 @@ function Template() {
         </>
     )
 }
-
 export default Template
