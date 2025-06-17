@@ -6,8 +6,34 @@ import { useEffect, useState } from "react";
 import Template from "./component/Template";
 import Navbar from "./component/Navbar";
 import { Rnd } from "react-rnd";
-export default function Page() {
 
+
+import html2canvas from "html2canvas";
+
+
+export default function Page() {
+  const handleDownload = async () => {
+    const element = document.getElementById("capture");
+    if (!element) return;
+
+    const canvas = await html2canvas(element);
+    const dataUrl = canvas.toDataURL("image/png");
+    const blob = await (await fetch(dataUrl)).blob();
+
+    const formData = new FormData();
+    formData.append("image", blob, "image.png");
+
+    const res = await fetch("/api/download-psd", {
+      method: "POST",
+      body: formData,
+    });
+
+    const fileBlob = await res.blob();
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(fileBlob);
+    link.download = "design.psd";
+    link.click();
+  };
 
 
   const [textStyles, setTextStyles] = useState({
@@ -46,6 +72,12 @@ export default function Page() {
       height: 50,
     },
   ]);
+
+
+
+
+
+
 
   const handleUpload = (e) => {
     const file = e.target.files[0];
@@ -232,6 +264,7 @@ export default function Page() {
       y: 100,
       width: 200,
       height: 100,
+
     },
   ]);
 
@@ -257,6 +290,29 @@ export default function Page() {
         height: 100,
       },
     ]);
+  };
+
+  const addImageElement = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const newId = elements.length + 1;
+      setElements((prev) => [
+        ...prev,
+        {
+          id: newId,
+          type: "image",
+          src: ev.target.result,
+          x: 200,
+          y: 200,
+          width: 300,
+          height: 200,
+        },
+      ]);
+    };
+    reader.readAsDataURL(file);
   };
 
   const deleteElement = (id) => {
@@ -285,7 +341,7 @@ export default function Page() {
                   ))}
                 </div>
                 <div className="design-area">
-                  <div className="design-area-canvas d-flex flex-col justify-content-center align-content-center">
+                  <div className="design-area-canvas d-flex flex-col justify-content-center align-content-center" id="capture">
                     <input
                       style={{
                         fontSize: `${textStyles.input1.textSize}px`,
@@ -294,7 +350,7 @@ export default function Page() {
                         textTransform: textStyles.input1.textTransform,
                       }}
                       className="canavas_input"
-                       value={textStyles.input1.text}
+                      value={textStyles.input1.text}
                     />
                     <input
                       type="text"
@@ -328,7 +384,21 @@ export default function Page() {
                     {/* Drag and drop */}
 
 
-                    <div className="editor-canvas">
+                    <div
+                      className="editor-canvas"
+                      style={{
+                        width: "100%",
+                        height: "90vh",
+                        position: "relative",
+
+                      }}
+                      onClick={(e) => {
+                        // Deselect if clicked on canvas
+                        if (e.target && e.target.classList && e.target.classList.contains("editor-canvas")) {
+                          setSelectedId(null);
+                        }
+                      }}
+                    >
                       {elements.map((el) => (
                         <Rnd
                           key={el.id}
@@ -355,21 +425,60 @@ export default function Page() {
                               )
                             );
                           }}
-                          onClick={() => setSelectedId(el.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedId(el.id);
+                          }}
                           bounds="parent"
+                          style={{
+                            border: selectedId === el.id ? "1px dashed #333" : "none",
+                            padding: "4px",
+                            
+                            zIndex: selectedId === el.id ? 10 : 1,
+                          }}
                         >
-                          <div className="editor-box">
-                            <textarea
-                              className="editor-textarea"
-                              value={el.content}
-                              onChange={(e) => handleTextChange(el.id, e.target.value)}
-                            />
-                            <button
-                              onClick={() => deleteElement(el.id)}
-                              className="delete-btn"
-                            >
-                              ✕
-                            </button>
+                          <div style={{ width: "100%", height: "100%", position: "relative" }}>
+                            {el.type === "text" ? (
+                              <textarea
+                                value={el.content}
+                                onChange={(e) => handleTextChange(el.id, e.target.value)}
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  resize: "none",
+                                  border: "none",
+                                  outline: "none",
+                                  fontSize: "16px",
+                                  background: "transparent",
+                                }}
+                              />
+                            ) : (
+                              <img
+                                src={el.src}
+                                alt="uploaded"
+                                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                              />
+                            )}
+
+                            {selectedId === el.id && (
+                              <button
+                                onClick={() => deleteElement(el.id)}
+                                style={{
+                                  position: "absolute",
+                                  top: -10,
+                                  right: -10,
+                                  background: "#e00",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "50%",
+                                  width: "24px",
+                                  height: "24px",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                ✕
+                              </button>
+                            )}
                           </div>
                         </Rnd>
                       ))}
@@ -380,7 +489,7 @@ export default function Page() {
                 </div>
                 <div className="design-footer">
                   <button type="button" className="btn  footer-btn">Save progress</button>
-                  <button type="button" className="btn btn-primary nav-btn" download>Download</button>
+                  <button type="button" className="btn btn-primary nav-btn" download >Download</button>
                 </div>
               </div>
 
@@ -487,10 +596,19 @@ export default function Page() {
                       </div>
 
                       <div className="">
-                        <div className="editor-toolbar">
+                        <div className="editor-toolbar" style={{ display: "flex", gap: "1rem", padding: "10px" }}>
                           <button onClick={addTextElement} className="add-text-btn">
                             Add Text
                           </button>
+                          <label className="add-text-btn" style={{ cursor: "pointer" }}>
+                            Add Image
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={addImageElement}
+                              style={{ display: "none" }}
+                            />
+                          </label>
                         </div>
                       </div>
 
@@ -556,6 +674,8 @@ export default function Page() {
                           </div>
                         )}
 
+
+<button onClick={handleDownload}>Download</button>
                       </div>
                     </div>
                   </div>
