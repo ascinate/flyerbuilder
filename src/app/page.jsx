@@ -40,15 +40,15 @@ export default function Page() {
     input1: {
       alignment: 'left',
       text: "pritam",
-      textSize: 24,
+      textSize: 16,
       textColor: '#000000',
       textColorTwo: '#000000',
       textTransform: 'none',
-      canvasBackgroundColor: '#E61E1E'
+      canvasBackgroundColor: '#ffffff'
     },
     input2: {
       alignment: 'left',
-      textSize: 24,
+      textSize: 16,
       textColor: '#000000',
       textColorTwo: '#000000',
       textTransform: 'none',
@@ -73,13 +73,32 @@ export default function Page() {
     },
   ]);
 
+  const [history, setHistory] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
 
+  const saveToHistory = () => {
+    setHistory((prev) => [
+      ...prev,
+      {
+        elements: JSON.parse(JSON.stringify(elements)),
+        textStyles: JSON.parse(JSON.stringify(textStyles)),
+      },
+    ]);
+  };
 
+  const handleUndo = () => {
+    if (history.length === 0) return;
+    const last = history[history.length - 1];
+    setElements(last.elements);
+    setTextStyles(last.textStyles);
+    setHistory((prev) => prev.slice(0, -1));
+  };
 
 
 
 
   const handleUpload = (e) => {
+    saveToHistory();
     const file = e.target.files[0];
     if (!file) return;
 
@@ -91,13 +110,13 @@ export default function Page() {
         width: 100,
         height: 60,
       };
-      setImages((prev) => [...prev, newImage]);
+      // setImages((prev) => [...prev, newImage]);
     };
     reader.readAsDataURL(file);
   };
 
   const deleteImage = (id) => {
-    setImages((prev) => prev.filter((img) => img.id !== id));
+    // setImages((prev) => prev.filter((img) => img.id !== id));
   };
 
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -120,7 +139,7 @@ export default function Page() {
         ),
       },
       {
-        label: 'Undo',
+        label: <button onClick={handleUndo}>Undo</button>,
         svg: (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
             <path d="M5.82843 6.99955L8.36396 9.53509L6.94975 10.9493L2 5.99955L6.94975 1.0498L8.36396 2.46402L5.82843 4.99955H13C17.4183 4.99955 21 8.58127 21 12.9996C21 17.4178 17.4183 20.9996 13 20.9996H4V18.9996H13C16.3137 18.9996 19 16.3133 19 12.9996C19 9.68584 16.3137 6.99955 13 6.99955H5.82843Z"></path>
@@ -144,36 +163,37 @@ export default function Page() {
         ),
       },
     ],
-    [
-      {
-        label: 'Opacity',
-        svg: (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19.5761 14.5764L15.7067 10.707C15.3162 10.3164 14.683 10.3164 14.2925 10.707L6.86484 18.1346C5.11358 16.6671 4 14.4636 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 12.9014 19.8509 13.7679 19.5761 14.5764ZM8.58927 19.2386L14.9996 12.8283L18.6379 16.4666C17.1992 18.6003 14.7613 19.9998 11.9996 19.9998C10.7785 19.9998 9.62345 19.7268 8.58927 19.2386ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM11 10C11 11.1046 10.1046 12 9 12C7.89543 12 7 11.1046 7 10C7 8.89543 7.89543 8 9 8C10.1046 8 11 8.89543 11 10Z"></path></svg>
-        ),
-      },
-      {
-        label: 'Layer',
-        svg: (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20.0833 15.1999L21.2854 15.9212C21.5221 16.0633 21.5989 16.3704 21.4569 16.6072C21.4146 16.6776 21.3557 16.7365 21.2854 16.7787L12.5144 22.0412C12.1977 22.2313 11.8021 22.2313 11.4854 22.0412L2.71451 16.7787C2.47772 16.6366 2.40093 16.3295 2.54301 16.0927C2.58523 16.0223 2.64413 15.9634 2.71451 15.9212L3.9166 15.1999L11.9999 20.0499L20.0833 15.1999ZM20.0833 10.4999L21.2854 11.2212C21.5221 11.3633 21.5989 11.6704 21.4569 11.9072C21.4146 11.9776 21.3557 12.0365 21.2854 12.0787L11.9999 17.6499L2.71451 12.0787C2.47772 11.9366 2.40093 11.6295 2.54301 11.3927C2.58523 11.3223 2.64413 11.2634 2.71451 11.2212L3.9166 10.4999L11.9999 15.3499L20.0833 10.4999ZM12.5144 1.30864L21.2854 6.5712C21.5221 6.71327 21.5989 7.0204 21.4569 7.25719C21.4146 7.32757 21.3557 7.38647 21.2854 7.42869L11.9999 12.9999L2.71451 7.42869C2.47772 7.28662 2.40093 6.97949 2.54301 6.7427C2.58523 6.67232 2.64413 6.61343 2.71451 6.5712L11.4854 1.30864C11.8021 1.11864 12.1977 1.11864 12.5144 1.30864ZM11.9999 3.33233L5.88723 6.99995L11.9999 10.6676L18.1126 6.99995L11.9999 3.33233Z"></path></svg>
-        ),
-      },
-      {
-        label: 'Flip',
-        svg: (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M11 2V22H13V2H11ZM7 6V18H4L4 6H7ZM4 4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H7C8.10457 20 9 19.1046 9 18V6C9 4.89543 8.10457 4 7 4H4ZM15 6C15 4.89543 15.8954 4 17 4H20C21.1046 4 22 4.89543 22 6V18C22 19.1046 21.1046 20 20 20H17C15.8954 20 15 19.1046 15 18V6Z"></path></svg>
-        ),
-      },
-      {
-        label: 'Duplicate',
-        svg: (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z"></path></svg>
-        ),
-      },
-    ],
+    // [
+    //   {
+    //     label: 'Opacity',
+    //     svg: (
+    //       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19.5761 14.5764L15.7067 10.707C15.3162 10.3164 14.683 10.3164 14.2925 10.707L6.86484 18.1346C5.11358 16.6671 4 14.4636 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 12.9014 19.8509 13.7679 19.5761 14.5764ZM8.58927 19.2386L14.9996 12.8283L18.6379 16.4666C17.1992 18.6003 14.7613 19.9998 11.9996 19.9998C10.7785 19.9998 9.62345 19.7268 8.58927 19.2386ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM11 10C11 11.1046 10.1046 12 9 12C7.89543 12 7 11.1046 7 10C7 8.89543 7.89543 8 9 8C10.1046 8 11 8.89543 11 10Z"></path></svg>
+    //     ),
+    //   },
+    //   {
+    //     label: 'Layer',
+    //     svg: (
+    //       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20.0833 15.1999L21.2854 15.9212C21.5221 16.0633 21.5989 16.3704 21.4569 16.6072C21.4146 16.6776 21.3557 16.7365 21.2854 16.7787L12.5144 22.0412C12.1977 22.2313 11.8021 22.2313 11.4854 22.0412L2.71451 16.7787C2.47772 16.6366 2.40093 16.3295 2.54301 16.0927C2.58523 16.0223 2.64413 15.9634 2.71451 15.9212L3.9166 15.1999L11.9999 20.0499L20.0833 15.1999ZM20.0833 10.4999L21.2854 11.2212C21.5221 11.3633 21.5989 11.6704 21.4569 11.9072C21.4146 11.9776 21.3557 12.0365 21.2854 12.0787L11.9999 17.6499L2.71451 12.0787C2.47772 11.9366 2.40093 11.6295 2.54301 11.3927C2.58523 11.3223 2.64413 11.2634 2.71451 11.2212L3.9166 10.4999L11.9999 15.3499L20.0833 10.4999ZM12.5144 1.30864L21.2854 6.5712C21.5221 6.71327 21.5989 7.0204 21.4569 7.25719C21.4146 7.32757 21.3557 7.38647 21.2854 7.42869L11.9999 12.9999L2.71451 7.42869C2.47772 7.28662 2.40093 6.97949 2.54301 6.7427C2.58523 6.67232 2.64413 6.61343 2.71451 6.5712L11.4854 1.30864C11.8021 1.11864 12.1977 1.11864 12.5144 1.30864ZM11.9999 3.33233L5.88723 6.99995L11.9999 10.6676L18.1126 6.99995L11.9999 3.33233Z"></path></svg>
+    //     ),
+    //   },
+    //   {
+    //     label: 'Flip',
+    //     svg: (
+    //       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M11 2V22H13V2H11ZM7 6V18H4L4 6H7ZM4 4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H7C8.10457 20 9 19.1046 9 18V6C9 4.89543 8.10457 4 7 4H4ZM15 6C15 4.89543 15.8954 4 17 4H20C21.1046 4 22 4.89543 22 6V18C22 19.1046 21.1046 20 20 20H17C15.8954 20 15 19.1046 15 18V6Z"></path></svg>
+    //     ),
+    //   },
+    //   {
+    //     label: 'Duplicate',
+    //     svg: (
+    //       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z"></path></svg>
+    //     ),
+    //   },
+    // ],
   ];
 
 
   const handleIncrease = (inputKey = 'input1') => {
+    saveToHistory();
     setTextStyles((prev) => ({
       ...prev,
       [inputKey]: {
@@ -184,6 +204,7 @@ export default function Page() {
   };
 
   const handleDecrease = (inputKey = 'input1') => {
+    saveToHistory();
     if (textStyles[inputKey].textSize > 1) {
       setTextStyles((prev) => ({
         ...prev,
@@ -196,6 +217,7 @@ export default function Page() {
   };
 
   const handleInputChange = (e, inputKey = 'input1') => {
+    saveToHistory();
     const newSize = parseInt(e.target.value, 10);
     if (!isNaN(newSize)) {
       setTextStyles((prev) => ({
@@ -209,6 +231,7 @@ export default function Page() {
   };
 
   const handleCapSamTextHandle = (inputKey = 'input1') => {
+    saveToHistory();
     setTextStyles((prev) => ({
       ...prev,
       [inputKey]: {
@@ -222,6 +245,7 @@ export default function Page() {
   };
 
   const updateTextStyle = (input, property, value) => {
+    saveToHistory();
     setTextStyles((prevStyles) => ({
       ...prevStyles,
       [input]: { ...prevStyles[input], [property]: value },
@@ -231,19 +255,20 @@ export default function Page() {
 
 
   const handleRemoveImage = () => {
+    saveToHistory();
     setUploadedImage(null);
   };
 
 
 
   const handleImageUpload = (e) => {
+    saveToHistory();
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
       const imageUrl = URL.createObjectURL(file);
       setUploadedImage(imageUrl);
     }
   };
-
 
 
   const handlePngImageUpload = (e) => {
@@ -253,7 +278,7 @@ export default function Page() {
       setUploadedPngImage(imageUrl);
     }
   }
-
+  // drag ans drop
 
   const [elements, setElements] = useState([
     {
@@ -262,22 +287,50 @@ export default function Page() {
       content: "Edit me!",
       x: 100,
       y: 100,
+      width: 180,
+      height: 80,
+    },
+    {
+      id: 2,
+      type: "image",
+      src: "/one.png",
+      x: 300,
+      y: 150,
       width: 200,
+      height: 150,
+    },
+    {
+      id: 3,
+      type: "image",
+      src: "/two.png",
+      x: 50,
+      y: 2,
+      width: 150,
       height: 100,
-
+    },
+    {
+      id: 4,
+      type: "image",
+      src: "/three.png",
+      x: 450,
+      y: 20,
+      width: 150,
+      height: 100,
     },
   ]);
 
-  const [selectedId, setSelectedId] = useState(null);
+
 
   const handleTextChange = (id, newText) => {
+    saveToHistory();
     setElements((prev) =>
       prev.map((el) => (el.id === id ? { ...el, content: newText } : el))
     );
   };
 
   const addTextElement = () => {
-    const newId = elements.length + 1;
+    saveToHistory();
+    const newId = Date.now(); // more unique id
     setElements((prev) => [
       ...prev,
       {
@@ -293,12 +346,13 @@ export default function Page() {
   };
 
   const addImageElement = (e) => {
+    saveToHistory();
     const file = e.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = (ev) => {
-      const newId = elements.length + 1;
+      const newId = Date.now();
       setElements((prev) => [
         ...prev,
         {
@@ -316,8 +370,35 @@ export default function Page() {
   };
 
   const deleteElement = (id) => {
+    saveToHistory();
     setElements((prev) => prev.filter((el) => el.id !== id));
   };
+  // drag ans drop
+
+  // background image color
+  const updateInput1Style = (property, value) => {
+    saveToHistory();
+    setTextStyles((prev) => ({
+      ...prev,
+      input1: {
+        ...prev.input1,
+        [property]: value,
+      },
+    }));
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <>
@@ -325,7 +406,7 @@ export default function Page() {
       <main className=''>
         <section className="section-body">
 
-          <div className="container">
+          <div className="">
             <div className="row">
               <div className="col-lg-8">
                 <div className="design-menu d-flex justify-between">
@@ -341,8 +422,8 @@ export default function Page() {
                   ))}
                 </div>
                 <div className="design-area">
-                  <div className="design-area-canvas d-flex flex-col justify-content-center align-content-center" id="capture">
-                    <input
+                  <div className="design-area-canvas d-flex flex-col justify-content-center align-content-center" id="capture" style={{ backgroundColor: textStyles.input1.canvasBackgroundColor }}>
+                    {/* <input
                       style={{
                         fontSize: `${textStyles.input1.textSize}px`,
                         textAlign: textStyles.input1.alignment,
@@ -360,7 +441,7 @@ export default function Page() {
                         color: textStyles.input2.textColorTwo,
                       }}
                       className="canavas_input"
-                    />
+                    /> */}
 
                     <div className="uploadedImage" >
                       {uploadedImage && (
@@ -374,11 +455,11 @@ export default function Page() {
 
 
                     <div className="main-image-list">
-                      {images.map((img) => (
+                      {/* {images.map((img) => (
                         <div key={img.id} className="image-box">
                           <Image src={img.src} width={img.width} height={img.height} alt="MainImage" />
                         </div>
-                      ))}
+                      ))} */}
                     </div>
 
                     {/* Drag and drop */}
@@ -390,11 +471,14 @@ export default function Page() {
                         width: "100%",
                         height: "90vh",
                         position: "relative",
-
                       }}
                       onClick={(e) => {
                         // Deselect if clicked on canvas
-                        if (e.target && e.target.classList && e.target.classList.contains("editor-canvas")) {
+                        if (
+                          e.target &&
+                          e.target.classList &&
+                          e.target.classList.contains("editor-canvas")
+                        ) {
                           setSelectedId(null);
                         }
                       }}
@@ -433,15 +517,21 @@ export default function Page() {
                           style={{
                             border: selectedId === el.id ? "1px dashed #333" : "none",
                             padding: "4px",
-                            
+
                             zIndex: selectedId === el.id ? 10 : 1,
                           }}
                         >
-                          <div style={{ width: "100%", height: "100%", position: "relative" }}>
+                          <div
+                            style={{ width: "100%", height: "100%", position: "relative" }}
+                          >
                             {el.type === "text" ? (
                               <textarea
                                 value={el.content}
-                                onChange={(e) => handleTextChange(el.id, e.target.value)}
+                                onChange={(e) => {
+                                  saveToHistory();
+                                  handleTextChange(el.id, e.target.value)
+                                }
+                                }
                                 style={{
                                   width: "100%",
                                   height: "100%",
@@ -450,13 +540,24 @@ export default function Page() {
                                   outline: "none",
                                   fontSize: "16px",
                                   background: "transparent",
+                                  fontSize: `${textStyles.input1.textSize}px`,
+                                  textAlign: textStyles.input1.alignment,
+                                  color: textStyles.input1.textColor,
+                                  color: textStyles.input1.textColorTwo,
+                                  textTransform: textStyles.input1.textTransform,
                                 }}
+
                               />
                             ) : (
                               <img
                                 src={el.src}
                                 alt="uploaded"
-                                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "contain",
+                                  pointerEvents: "none",
+                                }}
                               />
                             )}
 
@@ -522,7 +623,9 @@ export default function Page() {
                         <button
                           className="text-alignment"
                           onClick={() =>
-                            setTextStyles((prev) => ({
+                          {
+                            saveToHistory();
+ setTextStyles((prev) => ({
                               ...prev,
                               input1: {
                                 ...prev.input1,
@@ -530,13 +633,16 @@ export default function Page() {
                               },
                             }))
                           }
+                           
+                          }
                         >
                           <Image src="/left.webp" width={40} height={40} alt="left align" />
                         </button>
 
                         <button
                           className="text-alignment"
-                          onClick={() =>
+                          onClick={() => {
+                            saveToHistory();
                             setTextStyles((prev) => ({
                               ...prev,
                               input1: {
@@ -545,13 +651,16 @@ export default function Page() {
                               },
                             }))
                           }
+
+                          }
                         >
                           <Image src="/center.webp" width={40} height={40} alt="center align" />
                         </button>
 
                         <button
                           className="text-alignment"
-                          onClick={() =>
+                          onClick={() => {
+                            saveToHistory();
                             setTextStyles((prev) => ({
                               ...prev,
                               input1: {
@@ -559,6 +668,9 @@ export default function Page() {
                                 alignment: 'right',
                               },
                             }))
+
+                          }
+
                           }
                         >
                           <Image src="/right.webp" width={40} height={40} alt="right align" />
@@ -596,7 +708,10 @@ export default function Page() {
                       </div>
 
                       <div className="">
-                        <div className="editor-toolbar" style={{ display: "flex", gap: "1rem", padding: "10px" }}>
+                        <div
+                          className="editor-toolbar"
+                          style={{ display: "flex", gap: "1rem", padding: "10px" }}
+                        >
                           <button onClick={addTextElement} className="add-text-btn">
                             Add Text
                           </button>
@@ -634,7 +749,7 @@ export default function Page() {
 
 
                         <div className="previewCurrentImage">
-                          {images.length === 0 ? (
+                          {/* {images.length === 0 ? (
                             <p>No preview images.</p>
                           ) : (
                             <ul className="preview-list">
@@ -647,7 +762,7 @@ export default function Page() {
                                 </li>
                               ))}
                             </ul>
-                          )}
+                          )} */}
                         </div>
                       </div>
                     </div>
@@ -655,7 +770,7 @@ export default function Page() {
                       <input
                         type="color"
                         value={textStyles.input1.canvasBackgroundColor}
-                        onChange={(e) => updateInput1Style('canvasBackgroundColor', e.target.value)}
+                        onChange={(e) => updateInput1Style("canvasBackgroundColor", e.target.value)}
                         className="text-color-input"
                       />
                       <div className="image-upload">
@@ -675,7 +790,7 @@ export default function Page() {
                         )}
 
 
-<button onClick={handleDownload}>Download</button>
+                        <button onClick={handleDownload}>Download</button>
                       </div>
                     </div>
                   </div>

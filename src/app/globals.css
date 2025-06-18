@@ -371,7 +371,7 @@ border-radius: 50%;
 .editor-canvas {
   flex: 1;
   position: relative;
-  background-color: #e5e7eb;
+  background: none;
   overflow: hidden;
 }
 
@@ -404,7 +404,5 @@ border-radius: 50%;
   border: none;
   cursor: pointer;
 }
-
-
 
 /* canvas end */
