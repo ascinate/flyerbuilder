@@ -2,39 +2,42 @@
 
 import Image from "next/image";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Template from "./component/Template";
 import Navbar from "./component/Navbar";
 import { Rnd } from "react-rnd";
 
 
-import html2canvas from "html2canvas";
 
+import * as htmlToImage from 'html-to-image';
 
 export default function Page() {
+
+  const designRef = useRef(null);
+  const [format, setFormat] = useState('jpg');
+
   const handleDownload = async () => {
-    const element = document.getElementById("capture");
-    if (!element) return;
+    if (!designRef.current) return;
 
-    const canvas = await html2canvas(element);
-    const dataUrl = canvas.toDataURL("image/png");
-    const blob = await (await fetch(dataUrl)).blob();
+    const dataUrl = await htmlToImage.toJpeg(designRef.current, { quality: 1 });
 
-    const formData = new FormData();
-    formData.append("image", blob, "image.png");
+    const link = document.createElement('a');
+    if (format === 'jpg') {
+      link.download = 'design.jpg';
+      link.href = dataUrl;
+      link.click();
+    } else if (format === 'psd' || format === 'ai') {
+      // Trick: save as .jpg, then rename extension
+      const blob = await (await fetch(dataUrl)).blob();
+      const renamedFile = new File([blob], `design.${format}`, { type: 'image/jpeg' });
 
-    const res = await fetch("/api/download-psd", {
-      method: "POST",
-      body: formData,
-    });
-
-    const fileBlob = await res.blob();
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(fileBlob);
-    link.download = "design.psd";
-    link.click();
+      const url = URL.createObjectURL(renamedFile);
+      link.href = url;
+      link.download = `design.${format}`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
   };
-
 
   const [textStyles, setTextStyles] = useState({
     input1: {
@@ -58,25 +61,26 @@ export default function Page() {
   });
 
 
-  const [images, setImages] = useState([
-    {
-      id: 1,
-      src: "/pngImg.png",
-      width: 80,
-      height: 50,
-    },
-    {
-      id: 2,
-      src: "/pngImg.png",
-      width: 100,
-      height: 50,
-    },
-  ]);
+  // const [images, setImages] = useState([
+  //   {
+  //     id: 1,
+  //     src: "/pngImg.png",
+  //     width: 80,
+  //     height: 50,
+  //   },
+  //   {
+  //     id: 2,
+  //     src: "/pngImg.png",
+  //     width: 100,
+  //     height: 50,
+  //   },
+  // ]);
 
   const [history, setHistory] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
+  const [redoHistory, setRedoHistory] = useState([]);
 
-  const saveToHistory = () => {
+const saveToHistory = () => {
     setHistory((prev) => [
       ...prev,
       {
@@ -84,15 +88,39 @@ export default function Page() {
         textStyles: JSON.parse(JSON.stringify(textStyles)),
       },
     ]);
+    setRedoHistory([]);
   };
 
   const handleUndo = () => {
     if (history.length === 0) return;
     const last = history[history.length - 1];
+    setRedoHistory((prev) => [
+      ...prev,
+      {
+        elements: JSON.parse(JSON.stringify(elements)),
+        textStyles: JSON.parse(JSON.stringify(textStyles)),
+      },
+    ]);
     setElements(last.elements);
     setTextStyles(last.textStyles);
     setHistory((prev) => prev.slice(0, -1));
   };
+
+ const handleRedo = () => {
+    if (redoHistory.length === 0) return;
+    const next = redoHistory[redoHistory.length - 1];
+    setHistory((prev) => [
+      ...prev,
+      {
+        elements: JSON.parse(JSON.stringify(elements)),
+        textStyles: JSON.parse(JSON.stringify(textStyles)),
+      },
+    ]);
+    setElements(next.elements);
+    setTextStyles(next.textStyles);
+    setRedoHistory((prev) => prev.slice(0, -1));
+  };
+
 
 
 
@@ -117,6 +145,14 @@ export default function Page() {
 
   const deleteImage = (id) => {
     // setImages((prev) => prev.filter((img) => img.id !== id));
+  };
+    const deleteAllElements = () => {
+    if (elements.length === 0) return;
+    const confirmDelete = window.confirm("Are you sure you want to delete all elements?");
+    if (!confirmDelete) return;
+    saveToHistory();
+    setElements([]);
+    setSelectedId(null);
   };
 
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -147,7 +183,7 @@ export default function Page() {
         ),
       },
       {
-        label: 'Redo',
+        label: <button onClick={handleRedo}>Redo</button>,
         svg: (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
             <path d="M18.1716 6.99955H11C7.68629 6.99955 5 9.68584 5 12.9996C5 16.3133 7.68629 18.9996 11 18.9996H20V20.9996H11C6.58172 20.9996 3 17.4178 3 12.9996C3 8.58127 6.58172 4.99955 11 4.99955H18.1716L15.636 2.46402L17.0503 1.0498L22 5.99955L17.0503 10.9493L15.636 9.53509L18.1716 6.99955Z"></path>
@@ -155,7 +191,7 @@ export default function Page() {
         ),
       },
       {
-        label: 'Delete',
+        label:  <button onClick={deleteAllElements}>Delete</button>,
         svg: (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
             <path d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z"></path>
@@ -409,11 +445,11 @@ export default function Page() {
           <div className="">
             <div className="row">
               <div className="col-lg-8">
-                <div className="design-menu d-flex justify-between">
+                <div className="design-menu d-flex justify-between" >
                   {menuData.map((group, index) => (
                     <div key={index} className="design-sub-menu">
                       {group.map((item, idx) => (
-                        <button key={idx}>
+                        <button key={idx} className="sub-navbar">
                           {item.svg}
                           {item.label}
                         </button>
@@ -422,7 +458,7 @@ export default function Page() {
                   ))}
                 </div>
                 <div className="design-area">
-                  <div className="design-area-canvas d-flex flex-col justify-content-center align-content-center" id="capture" style={{ backgroundColor: textStyles.input1.canvasBackgroundColor }}>
+                  <div className="design-area-canvas d-flex flex-col justify-content-center align-content-center" style={{ backgroundColor: textStyles.input1.canvasBackgroundColor }} ref={designRef}>
                     {/* <input
                       style={{
                         fontSize: `${textStyles.input1.textSize}px`,
@@ -589,8 +625,18 @@ export default function Page() {
                   </div>
                 </div>
                 <div className="design-footer">
-                  <button type="button" className="btn  footer-btn">Save progress</button>
-                  <button type="button" className="btn btn-primary nav-btn" download >Download</button>
+           
+                  <div style={{ marginTop: 20 }}>
+                    <select value={format} onChange={(e) => setFormat(e.target.value)} className="footer-btn">
+                      <option value="psd">.psd</option>
+                      <option value="ai">.ai</option>
+                      <option value="jpg">.jpg</option>
+                    </select>
+
+                    <button onClick={handleDownload} className="btn btn-primary nav-btn">
+                      Download
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -622,10 +668,9 @@ export default function Page() {
                       <div className="d-flex justify-content-between w-100">
                         <button
                           className="text-alignment"
-                          onClick={() =>
-                          {
+                          onClick={() => {
                             saveToHistory();
- setTextStyles((prev) => ({
+                            setTextStyles((prev) => ({
                               ...prev,
                               input1: {
                                 ...prev.input1,
@@ -633,7 +678,7 @@ export default function Page() {
                               },
                             }))
                           }
-                           
+
                           }
                         >
                           <Image src="/left.webp" width={40} height={40} alt="left align" />
@@ -790,7 +835,7 @@ export default function Page() {
                         )}
 
 
-                        <button onClick={handleDownload}>Download</button>
+
                       </div>
                     </div>
                   </div>
