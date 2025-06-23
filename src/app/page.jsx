@@ -44,21 +44,99 @@ export default function Page() {
       alignment: 'left',
       text: "pritam",
       textSize: 16,
-      textColor: '#000000',
-      textColorTwo: '#000000',
+      // textColor: '#000000',
+      // textColorTwo: '#000000',
       textTransform: 'none',
       canvasBackgroundColor: '#ffffff'
     },
-    input2: {
-      alignment: 'left',
-      textSize: 16,
-      textColor: '#000000',
-      textColorTwo: '#000000',
-      textTransform: 'none',
-      canvasBackgroundColor: '#ffffff'
-    },
+    // input2: {
+    //   alignment: 'left',
+    //   textSize: 16,
+    //   textColor: '#000000',
+    //   textColorTwo: '#000000',
+    //   textTransform: 'none',
+    //   canvasBackgroundColor: '#ffffff'
+    // },
 
   });
+
+
+  // *******************************************
+
+  const [textColor, setTextColor] = useState("#000000");
+
+  const editorRefs = useRef({});
+
+  const applyColorToSelectedText = (color) => {
+    document.execCommand("styleWithCSS", false, true);
+    document.execCommand("foreColor", false, color);
+  };
+
+
+
+  const handleColorChange = (e) => {
+    const color = e.target.value;
+    setTextColor(color);
+    applyColorToSelectedText(color);
+  };
+
+  const handleContentChange = (id) => {
+    const html = editorRefs.current[id]?.innerHTML;
+    setElements((prev) =>
+      prev.map((el) => (el.id === id ? { ...el, content: html } : el))
+    );
+  };
+
+  const addTextElement = () => {
+    const newId = Date.now();
+    setElements((prev) => [
+      ...prev,
+      {
+        id: newId,
+        type: "text",
+        content: "New Text",
+        x: 150,
+        y: 150,
+        width: 200,
+        height: 100,
+      },
+    ]);
+  };
+
+  const addImageElement = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const newId = Date.now();
+      setElements((prev) => [
+        ...prev,
+        {
+          id: newId,
+          type: "image",
+          src: ev.target.result,
+          x: 200,
+          y: 200,
+          width: 300,
+          height: 200,
+        },
+      ]);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const deleteElement = (id) => {
+    setElements((prev) => prev.filter((el) => el.id !== id));
+  };
+
+
+
+  // *******************************************
+
+
+
+
 
 
   // const [images, setImages] = useState([
@@ -80,7 +158,7 @@ export default function Page() {
   const [selectedId, setSelectedId] = useState(null);
   const [redoHistory, setRedoHistory] = useState([]);
 
-const saveToHistory = () => {
+  const saveToHistory = () => {
     setHistory((prev) => [
       ...prev,
       {
@@ -106,7 +184,7 @@ const saveToHistory = () => {
     setHistory((prev) => prev.slice(0, -1));
   };
 
- const handleRedo = () => {
+  const handleRedo = () => {
     if (redoHistory.length === 0) return;
     const next = redoHistory[redoHistory.length - 1];
     setHistory((prev) => [
@@ -146,7 +224,7 @@ const saveToHistory = () => {
   const deleteImage = (id) => {
     // setImages((prev) => prev.filter((img) => img.id !== id));
   };
-    const deleteAllElements = () => {
+  const deleteAllElements = () => {
     if (elements.length === 0) return;
     const confirmDelete = window.confirm("Are you sure you want to delete all elements?");
     if (!confirmDelete) return;
@@ -191,7 +269,7 @@ const saveToHistory = () => {
         ),
       },
       {
-        label:  <button onClick={deleteAllElements}>Delete</button>,
+        label: <button onClick={deleteAllElements}>Delete</button>,
         svg: (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
             <path d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z"></path>
@@ -280,14 +358,15 @@ const saveToHistory = () => {
     }));
   };
 
-  const updateTextStyle = (input, property, value) => {
-    saveToHistory();
-    setTextStyles((prevStyles) => ({
-      ...prevStyles,
-      [input]: { ...prevStyles[input], [property]: value },
+  const updateTextStyle = (inputKey, key, value) => {
+    setTextStyles((prev) => ({
+      ...prev,
+      [inputKey]: {
+        ...prev[inputKey],
+        [key]: value,
+      },
     }));
   };
-
 
 
   const handleRemoveImage = () => {
@@ -364,51 +443,9 @@ const saveToHistory = () => {
     );
   };
 
-  const addTextElement = () => {
-    saveToHistory();
-    const newId = Date.now(); // more unique id
-    setElements((prev) => [
-      ...prev,
-      {
-        id: newId,
-        type: "text",
-        content: "New Text",
-        x: 150,
-        y: 150,
-        width: 200,
-        height: 100,
-      },
-    ]);
-  };
 
-  const addImageElement = (e) => {
-    saveToHistory();
-    const file = e.target.files[0];
-    if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const newId = Date.now();
-      setElements((prev) => [
-        ...prev,
-        {
-          id: newId,
-          type: "image",
-          src: ev.target.result,
-          x: 200,
-          y: 200,
-          width: 300,
-          height: 200,
-        },
-      ]);
-    };
-    reader.readAsDataURL(file);
-  };
 
-  const deleteElement = (id) => {
-    saveToHistory();
-    setElements((prev) => prev.filter((el) => el.id !== id));
-  };
   // drag ans drop
 
   // background image color
@@ -443,7 +480,7 @@ const saveToHistory = () => {
         <section className="section-body">
 
           <div className="">
-            <div className="row">
+            <div className="row m-0 p-0">
               <div className="col-lg-8">
                 <div className="design-menu d-flex justify-between" >
                   {menuData.map((group, index) => (
@@ -561,29 +598,25 @@ const saveToHistory = () => {
                             style={{ width: "100%", height: "100%", position: "relative" }}
                           >
                             {el.type === "text" ? (
-                              <textarea
-                                value={el.content}
-                                onChange={(e) => {
-                                  saveToHistory();
-                                  handleTextChange(el.id, e.target.value)
-                                }
-                                }
+                              <div
+                                ref={(ref) => (editorRefs.current[el.id] = ref)}
+                                contentEditable
+                                suppressContentEditableWarning={true}
+                                dangerouslySetInnerHTML={{ __html: el.content }}
+                                onInput={() => handleContentChange(el.id)}
                                 style={{
                                   width: "100%",
                                   height: "100%",
-                                  resize: "none",
-                                  border: "none",
-                                  outline: "none",
-                                  fontSize: "16px",
-                                  background: "transparent",
                                   fontSize: `${textStyles.input1.textSize}px`,
                                   textAlign: textStyles.input1.alignment,
-                                  color: textStyles.input1.textColor,
-                                  color: textStyles.input1.textColorTwo,
                                   textTransform: textStyles.input1.textTransform,
+                                  outline: "none",
+                                  overflow: "auto",
+                                  background: "transparent",
+                                  color: textStyles.input1.textColor,
                                 }}
-
                               />
+
                             ) : (
                               <img
                                 src={el.src}
@@ -625,7 +658,7 @@ const saveToHistory = () => {
                   </div>
                 </div>
                 <div className="design-footer">
-           
+
                   <div style={{ marginTop: 20 }}>
                     <select value={format} onChange={(e) => setFormat(e.target.value)} className="footer-btn">
                       <option value="psd">.psd</option>
@@ -734,18 +767,27 @@ const saveToHistory = () => {
                         <button className="size-btn btn-increase" onClick={() => handleIncrease('input1')}>+</button>
                       </div>
                       <div className="d-flex justify-content-around">
-                        <input
+                        {/* <input
                           type="color"
                           value={textStyles.input2.textColor}
                           onChange={(e) => updateTextStyle('input2', 'textColor', e.target.value)}
                           className="text-color-input"
-                        />
+                        /> */}
+
                         <input
                           type="color"
                           value={textStyles.input1.textColorTwo}
-                          onChange={(e) => updateTextStyle('input1', 'textColorTwo', e.target.value)}
+                          onChange={(e) => {
+                            const color = e.target.value;
+                            updateTextStyle("input1", "textColorTwo", color);
+                            if (selectedId) {
+                              document.execCommand("styleWithCSS", false, true);
+                              document.execCommand("foreColor", false, color);
+                            }
+                          }}
                           className="text-color-input"
                         />
+
 
                         <button className="size-btn" onClick={() => handleCapSamTextHandle('input1')}>
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20.4668 8.69379L20.7134 8.12811C21.1529 7.11947 21.9445 6.31641 22.9323 5.87708L23.6919 5.53922C24.1027 5.35653 24.1027 4.75881 23.6919 4.57612L22.9748 4.25714C21.9616 3.80651 21.1558 2.97373 20.7238 1.93083L20.4706 1.31953C20.2942 0.893489 19.7058 0.893489 19.5293 1.31953L19.2761 1.93083C18.8442 2.97373 18.0384 3.80651 17.0252 4.25714L16.308 4.57612C15.8973 4.75881 15.8973 5.35653 16.308 5.53922L17.0677 5.87708C18.0555 6.31641 18.8471 7.11947 19.2866 8.12811L19.5331 8.69379C19.7136 9.10792 20.2864 9.10792 20.4668 8.69379ZM2 4C2 3.44772 2.44772 3 3 3H14V5H4V19H20V11H22V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4ZM7 8H17V11H15V10H13V14H14.5V16H9.5V14H11V10H9V11H7V8Z"></path></svg>
@@ -771,9 +813,13 @@ const saveToHistory = () => {
                           </label>
                         </div>
                       </div>
-
-
-
+                      <div className="">
+                        <select name="" id="">
+                          <option value="">airal</option>
+                          <option value="">urbano</option>
+                          <option value="">calibari</option>
+                        </select>
+                      </div>
                     </div>
                     <div className="tab-pane " id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
                       <div className="image-upload">
