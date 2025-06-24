@@ -47,7 +47,11 @@ export default function Page() {
       // textColor: '#000000',
       // textColorTwo: '#000000',
       textTransform: 'none',
-      canvasBackgroundColor: '#ffffff'
+      canvasBackgroundColor: '#ffffff',
+      fontFamily: ' Calibri',
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+      letterSpacing: 0,
     },
     // input2: {
     //   alignment: 'left',
@@ -277,32 +281,32 @@ export default function Page() {
         ),
       },
     ],
-    // [
-    //   {
-    //     label: 'Opacity',
-    //     svg: (
-    //       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19.5761 14.5764L15.7067 10.707C15.3162 10.3164 14.683 10.3164 14.2925 10.707L6.86484 18.1346C5.11358 16.6671 4 14.4636 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 12.9014 19.8509 13.7679 19.5761 14.5764ZM8.58927 19.2386L14.9996 12.8283L18.6379 16.4666C17.1992 18.6003 14.7613 19.9998 11.9996 19.9998C10.7785 19.9998 9.62345 19.7268 8.58927 19.2386ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM11 10C11 11.1046 10.1046 12 9 12C7.89543 12 7 11.1046 7 10C7 8.89543 7.89543 8 9 8C10.1046 8 11 8.89543 11 10Z"></path></svg>
-    //     ),
-    //   },
-    //   {
-    //     label: 'Layer',
-    //     svg: (
-    //       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20.0833 15.1999L21.2854 15.9212C21.5221 16.0633 21.5989 16.3704 21.4569 16.6072C21.4146 16.6776 21.3557 16.7365 21.2854 16.7787L12.5144 22.0412C12.1977 22.2313 11.8021 22.2313 11.4854 22.0412L2.71451 16.7787C2.47772 16.6366 2.40093 16.3295 2.54301 16.0927C2.58523 16.0223 2.64413 15.9634 2.71451 15.9212L3.9166 15.1999L11.9999 20.0499L20.0833 15.1999ZM20.0833 10.4999L21.2854 11.2212C21.5221 11.3633 21.5989 11.6704 21.4569 11.9072C21.4146 11.9776 21.3557 12.0365 21.2854 12.0787L11.9999 17.6499L2.71451 12.0787C2.47772 11.9366 2.40093 11.6295 2.54301 11.3927C2.58523 11.3223 2.64413 11.2634 2.71451 11.2212L3.9166 10.4999L11.9999 15.3499L20.0833 10.4999ZM12.5144 1.30864L21.2854 6.5712C21.5221 6.71327 21.5989 7.0204 21.4569 7.25719C21.4146 7.32757 21.3557 7.38647 21.2854 7.42869L11.9999 12.9999L2.71451 7.42869C2.47772 7.28662 2.40093 6.97949 2.54301 6.7427C2.58523 6.67232 2.64413 6.61343 2.71451 6.5712L11.4854 1.30864C11.8021 1.11864 12.1977 1.11864 12.5144 1.30864ZM11.9999 3.33233L5.88723 6.99995L11.9999 10.6676L18.1126 6.99995L11.9999 3.33233Z"></path></svg>
-    //     ),
-    //   },
-    //   {
-    //     label: 'Flip',
-    //     svg: (
-    //       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M11 2V22H13V2H11ZM7 6V18H4L4 6H7ZM4 4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H7C8.10457 20 9 19.1046 9 18V6C9 4.89543 8.10457 4 7 4H4ZM15 6C15 4.89543 15.8954 4 17 4H20C21.1046 4 22 4.89543 22 6V18C22 19.1046 21.1046 20 20 20H17C15.8954 20 15 19.1046 15 18V6Z"></path></svg>
-    //     ),
-    //   },
-    //   {
-    //     label: 'Duplicate',
-    //     svg: (
-    //       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z"></path></svg>
-    //     ),
-    //   },
-    // ],
+    [
+      {
+        label: 'Opacity',
+        svg: (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19.5761 14.5764L15.7067 10.707C15.3162 10.3164 14.683 10.3164 14.2925 10.707L6.86484 18.1346C5.11358 16.6671 4 14.4636 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 12.9014 19.8509 13.7679 19.5761 14.5764ZM8.58927 19.2386L14.9996 12.8283L18.6379 16.4666C17.1992 18.6003 14.7613 19.9998 11.9996 19.9998C10.7785 19.9998 9.62345 19.7268 8.58927 19.2386ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM11 10C11 11.1046 10.1046 12 9 12C7.89543 12 7 11.1046 7 10C7 8.89543 7.89543 8 9 8C10.1046 8 11 8.89543 11 10Z"></path></svg>
+        ),
+      },
+      {
+        label: 'Layer',
+        svg: (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20.0833 15.1999L21.2854 15.9212C21.5221 16.0633 21.5989 16.3704 21.4569 16.6072C21.4146 16.6776 21.3557 16.7365 21.2854 16.7787L12.5144 22.0412C12.1977 22.2313 11.8021 22.2313 11.4854 22.0412L2.71451 16.7787C2.47772 16.6366 2.40093 16.3295 2.54301 16.0927C2.58523 16.0223 2.64413 15.9634 2.71451 15.9212L3.9166 15.1999L11.9999 20.0499L20.0833 15.1999ZM20.0833 10.4999L21.2854 11.2212C21.5221 11.3633 21.5989 11.6704 21.4569 11.9072C21.4146 11.9776 21.3557 12.0365 21.2854 12.0787L11.9999 17.6499L2.71451 12.0787C2.47772 11.9366 2.40093 11.6295 2.54301 11.3927C2.58523 11.3223 2.64413 11.2634 2.71451 11.2212L3.9166 10.4999L11.9999 15.3499L20.0833 10.4999ZM12.5144 1.30864L21.2854 6.5712C21.5221 6.71327 21.5989 7.0204 21.4569 7.25719C21.4146 7.32757 21.3557 7.38647 21.2854 7.42869L11.9999 12.9999L2.71451 7.42869C2.47772 7.28662 2.40093 6.97949 2.54301 6.7427C2.58523 6.67232 2.64413 6.61343 2.71451 6.5712L11.4854 1.30864C11.8021 1.11864 12.1977 1.11864 12.5144 1.30864ZM11.9999 3.33233L5.88723 6.99995L11.9999 10.6676L18.1126 6.99995L11.9999 3.33233Z"></path></svg>
+        ),
+      },
+      {
+        label: 'Flip',
+        svg: (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M11 2V22H13V2H11ZM7 6V18H4L4 6H7ZM4 4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H7C8.10457 20 9 19.1046 9 18V6C9 4.89543 8.10457 4 7 4H4ZM15 6C15 4.89543 15.8954 4 17 4H20C21.1046 4 22 4.89543 22 6V18C22 19.1046 21.1046 20 20 20H17C15.8954 20 15 19.1046 15 18V6Z"></path></svg>
+        ),
+      },
+      {
+        label: 'Duplicate',
+        svg: (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z"></path></svg>
+        ),
+      },
+    ],
   ];
 
 
@@ -461,17 +465,29 @@ export default function Page() {
   };
 
 
-
-
-
-
-
-
-
-
-
-
-
+  //font-style
+  const fontOptions = [
+    { label: "Arial", value: "Arial, sans-serif" },
+    { label: "Verdana", value: "Verdana, sans-serif" },
+    { label: "Tahoma", value: "Tahoma, sans-serif" },
+    { label: "Trebuchet MS", value: "'Trebuchet MS', sans-serif" },
+    { label: "Times New Roman", value: "'Times New Roman', serif" },
+    { label: "Georgia", value: "Georgia, serif" },
+    { label: "Garamond", value: "Garamond, serif" },
+    { label: "Courier New", value: "'Courier New', monospace" },
+    { label: "Impact", value: "Impact, sans-serif" },
+    { label: "Comic Sans MS", value: "'Comic Sans MS', cursive" },
+    { label: "Lucida Sans", value: "'Lucida Sans', sans-serif" },
+    { label: "Helvetica", value: "Helvetica, Arial, sans-serif" },
+    { label: "Palatino", value: "Palatino, 'Palatino Linotype', serif" },
+    { label: "Book Antiqua", value: "'Book Antiqua', Palatino, serif" },
+    { label: "Franklin Gothic Medium", value: "'Franklin Gothic Medium', Arial, sans-serif" },
+    { label: "Gill Sans", value: "'Gill Sans', 'Gill Sans MT', Calibri, sans-serif" },
+    { label: "Cambria", value: "Cambria, Georgia, Times, 'Times New Roman', serif" },
+    { label: "Century Gothic", value: "'Century Gothic', Futura, Arial, sans-serif" },
+    { label: "Rockwell", value: "Rockwell, 'Courier New', Courier, monospace" },
+    { label: "Baskerville", value: "Baskerville, 'Baskerville Old Face', Georgia, serif" },
+  ];
 
   return (
     <>
@@ -598,6 +614,8 @@ export default function Page() {
                             style={{ width: "100%", height: "100%", position: "relative" }}
                           >
                             {el.type === "text" ? (
+
+                              // i replase textarea here
                               <div
                                 ref={(ref) => (editorRefs.current[el.id] = ref)}
                                 contentEditable
@@ -609,7 +627,11 @@ export default function Page() {
                                   height: "100%",
                                   fontSize: `${textStyles.input1.textSize}px`,
                                   textAlign: textStyles.input1.alignment,
+                                  fontFamily: textStyles.input1.fontFamily,
                                   textTransform: textStyles.input1.textTransform,
+                                    letterSpacing: `${textStyles.input1.letterSpacing}px`,
+                                  fontWeight: textStyles.input1.fontWeight,
+                                  fontStyle: textStyles.input1.fontStyle,
                                   outline: "none",
                                   overflow: "auto",
                                   background: "transparent",
@@ -729,7 +751,6 @@ export default function Page() {
                               },
                             }))
                           }
-
                           }
                         >
                           <Image src="/center.webp" width={40} height={40} alt="center align" />
@@ -746,9 +767,7 @@ export default function Page() {
                                 alignment: 'right',
                               },
                             }))
-
                           }
-
                           }
                         >
                           <Image src="/right.webp" width={40} height={40} alt="right align" />
@@ -814,12 +833,94 @@ export default function Page() {
                         </div>
                       </div>
                       <div className="">
-                        <select name="" id="">
-                          <option value="">airal</option>
-                          <option value="">urbano</option>
-                          <option value="">calibari</option>
+                        <select
+                          value={textStyles.input1.fontFamily}
+                          onChange={(e) =>
+                            setTextStyles((prev) => ({
+                              ...prev,
+                              input1: {
+                                ...prev.input1,
+                                fontFamily: e.target.value,
+                              },
+                            }))
+                          }
+                        >
+                          {fontOptions.map((font) => (
+                            <option key={font.value} value={font.value}>
+                              {font.label}
+                            </option>
+                          ))}
                         </select>
+
+
+
+
+
+                        <button
+                          className="text-alignment"
+                          onClick={() =>
+                            setTextStyles((prev) => ({
+                              ...prev,
+                              input1: {
+                                ...prev.input1,
+                                fontWeight: prev.input1.fontWeight === 'bold' ? 'normal' : 'bold',
+                              },
+                            }))
+                          }
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 11H12.5C13.8807 11 15 9.88071 15 8.5C15 7.11929 13.8807 6 12.5 6H8V11ZM18 15.5C18 17.9853 15.9853 20 13.5 20H6V4H12.5C14.9853 4 17 6.01472 17 8.5C17 9.70431 16.5269 10.7981 15.7564 11.6058C17.0979 12.3847 18 13.837 18 15.5ZM8 13V18H13.5C14.8807 18 16 16.8807 16 15.5C16 14.1193 14.8807 13 13.5 13H8Z"></path></svg>
+                        </button>
+
+                        <button
+                          className="text-alignment"
+                          onClick={() =>
+                            setTextStyles((prev) => ({
+                              ...prev,
+                              input1: {
+                                ...prev.input1,
+                                fontStyle: prev.input1.fontStyle === 'italic' ? 'normal' : 'italic',
+                              },
+                            }))
+                          }
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M15 20H7V18H9.92661L12.0425 6H9V4H17V6H14.0734L11.9575 18H15V20Z"></path></svg>
+                        </button>
+
+
                       </div>
+                    <div className="">
+  <p>Spacing</p>
+  <input
+    type="range"
+    min="0"
+    max="10"
+    step="0.1"
+    value={textStyles.input1.letterSpacing}
+    onChange={(e) =>
+      setTextStyles((prev) => ({
+        ...prev,
+        input1: {
+          ...prev.input1,
+          letterSpacing: parseFloat(e.target.value),
+        },
+      }))
+    }
+  />
+  <input
+    type="text"
+    value={textStyles.input1.letterSpacing}
+    onChange={(e) =>
+      setTextStyles((prev) => ({
+        ...prev,
+        input1: {
+          ...prev.input1,
+          letterSpacing: parseFloat(e.target.value) || 0,
+        },
+      }))
+    }
+  />
+</div>
+
                     </div>
                     <div className="tab-pane " id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
                       <div className="image-upload">
