@@ -424,10 +424,12 @@ textarea {
   position: relative;
   .layer-two-btn {
     text-align: center;
-    width: 120px;
+    width: 180px;
+    padding: 5px;
     position: absolute;
+    border-radius: 6px;
     top: 100%;
-    left: 0;
+    left: -100%;
     background-color: var(--white-color);
     display: none;
 
@@ -437,7 +439,7 @@ textarea {
     }
 
     & button:hover {
-      background-color: red;
+      background-color: lightgray;
     }
   }
 
@@ -455,7 +457,8 @@ textarea {
     height: 50px;
     position: absolute;
     top: 100%;
-    left: 0;
+    left: -100%;
+    border-radius: 8px;
     background-color: var(--white-color);
     display: none;
 

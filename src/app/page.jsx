@@ -360,7 +360,7 @@ export default function Page() {
       flipHorizontal: false,
       flipVertical: false,
       opacity: 1,
-      
+
     },
     {
       id: 2,
@@ -492,9 +492,62 @@ export default function Page() {
             </div>
           </div>
         ,
-
         svg: (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19.5761 14.5764L15.7067 10.707C15.3162 10.3164 14.683 10.3164 14.2925 10.707L6.86484 18.1346C5.11358 16.6671 4 14.4636 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 12.9014 19.8509 13.7679 19.5761 14.5764ZM8.58927 19.2386L14.9996 12.8283L18.6379 16.4666C17.1992 18.6003 14.7613 19.9998 11.9996 19.9998C10.7785 19.9998 9.62345 19.7268 8.58927 19.2386ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM11 10C11 11.1046 10.1046 12 9 12C7.89543 12 7 11.1046 7 10C7 8.89543 7.89543 8 9 8C10.1046 8 11 8.89543 11 10Z"></path></svg>
+          <svg width="18" height="18" viewBox="0 0 112 106" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 7C0 3.134 3.13401 0 7 0H105C108.866 0 112 3.13401 112 7V99C112 102.866 108.866 106 105 106H7C3.13401 106 0 102.866 0 99V7Z" fill="#AEAEAE" />
+            <path d="M46 0H56V5H46V0Z" fill="white" />
+            <path d="M46 101H56V106H46V101Z" fill="#474646" />
+            <path d="M46 8H56V18H46V8Z" fill="#474646" />
+            <path d="M86 8H96V18H86V8Z" fill="#474646" />
+            <path d="M112 98H102V88H112V98Z" fill="#474646" />
+            <path d="M61 8H71V18H61V8Z" fill="#474646" />
+            <path d="M71 98H81V88H71V98Z" fill="#474646" />
+            <path d="M71 74H81V64H71V74Z" fill="#474646" />
+            <path d="M46 31H56V41H46V31Z" fill="#474646" />
+            <path d="M86 31H96V41H86V31Z" fill="#474646" />
+            <path d="M112 62H102V52H112V62Z" fill="white" />
+            <path d="M112 72H102V62H112V72Z" fill="#474646" />
+            <path d="M61 31H71V41H61V31Z" fill="#474646" />
+            <path d="M71 51H81V41H71V51Z" fill="#474646" />
+            <path d="M46 78H56V88H46V78Z" fill="#474646" />
+            <path d="M46 54H56V64H46V54Z" fill="#474646" />
+            <path d="M86 78H96V88H86V78Z" fill="#474646" />
+            <path d="M86 54H96V64H86V54Z" fill="#474646" />
+            <path d="M86 101H96V106H86V101Z" fill="white" />
+            <path d="M102 101H112V101C112 103.761 109.761 106 107 106H102V101Z" fill="white" />
+            <path d="M102 7V0H105C108.866 0 112 3.13401 112 7V7H102Z" fill="#474646" />
+            <path d="M112 29H102V19H112V29Z" fill="#474646" />
+            <path d="M61 78H71V88H61V78Z" fill="#474646" />
+            <path d="M61 54H71V64H61V54Z" fill="#474646" />
+            <path d="M71 28H81V18H71V28Z" fill="#474646" />
+            <path d="M71 5H81V0H71V5Z" fill="#474646" />
+            <path d="M71 106H81V101H71V106Z" fill="#474646" />
+            <path d="M46 18H56V28H46V18Z" fill="white" />
+            <path d="M86 18H96V28H86V18Z" fill="white" />
+            <path d="M112 88H102V78H112V88Z" fill="white" />
+            <path d="M61 18H71V28H61V18Z" fill="white" />
+            <path d="M61 0H71V5H61V0Z" fill="white" />
+            <path d="M61 101H71V106H61V101Z" fill="white" />
+            <path d="M71 88H81V78H71V88Z" fill="white" />
+            <path d="M71 64H81V54H71V64Z" fill="white" />
+            <path d="M46 41H56V51H46V41Z" fill="white" />
+            <path d="M86 41H96V51H86V41Z" fill="white" />
+            <path d="M112 45H102V35H112V45Z" fill="white" />
+            <path d="M61 41H71V51H61V41Z" fill="white" />
+            <path d="M71 41H81V31H71V41Z" fill="white" />
+            <path d="M46 88H56V98H46V88Z" fill="white" />
+            <path d="M46 64H56V74H46V64Z" fill="white" />
+            <path d="M86 88H96V98H86V88Z" fill="white" />
+            <path d="M86 64H96V74H86V64Z" fill="white" />
+            <path d="M112 19H102V9H112V19Z" fill="white" />
+            <path d="M96 5H86V0H96V5Z" fill="white" />
+            <path d="M61 88H71V98H61V88Z" fill="white" />
+            <path d="M61 64H71V74H61V64Z" fill="white" />
+            <path d="M0 7C0 3.134 3.13401 0 7 0H47V106H7C3.13401 106 0 102.866 0 99V7Z" fill="#474646" />
+            <path d="M71 18H81V8H71V18Z" fill="white" />
+          </svg>
+
+
         ),
       },
       {
@@ -502,8 +555,21 @@ export default function Page() {
           <div className="layer-btn">
             <button className="handleLayer">Layer</button>
             <div className="layer-two-btn">
-              <button onClick={() => handleBringFont(selectedId)}>Bring to Front</button>
-              <button onClick={() => handleSendBack(selectedId)}>Send to Back</button>
+              <button className="d-flex align-items-center justify-content-center" onClick={() => handleBringFont(selectedId)}>
+                <svg width="18" height="18" viewBox="0 0 118 109" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M60.2722 81.7364L116.846 41.188C117.987 40.3701 117.953 38.6618 116.779 37.8909L60.2053 0.721549C59.5387 0.283571 58.6756 0.283573 58.0089 0.721551L1.43501 37.8909C0.261643 38.6618 0.226975 40.3701 1.3681 41.188L57.942 81.7364C58.6385 82.2356 59.5757 82.2356 60.2722 81.7364Z" fill="black" />
+                  <path d="M107.462 59.9217C109.912 58.1259 113.354 58.6554 115.15 61.1052C116.946 63.555 116.415 66.9969 113.965 68.7927L59.318 108.85L6.01425 68.7527L5.79257 68.5769C3.5587 66.7123 3.15636 63.4022 4.92538 61.0506C6.69443 58.699 9.98619 58.1682 12.3971 59.7976L12.6275 59.9617L59.4019 95.1492L107.462 59.9217Z" fill="black" />
+                </svg>
+                Bring to Front
+              </button>
+              <button className="d-flex align-items-center justify-content-center" onClick={() => handleSendBack(selectedId)}>
+                <svg width="18" height="18" viewBox="0 0 127 116" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M59.743 1.83105C61.8792 0.538506 64.5769 0.582157 66.6756 1.96093L123.25 39.1299C127.063 41.6353 127.176 47.1876 123.468 49.8457L66.8934 90.3935C64.6297 92.016 61.5838 92.016 59.3201 90.3935L2.74689 49.8457C-0.961729 47.1876 -0.849662 41.6354 2.96369 39.1299L59.5379 1.96093L59.743 1.83105ZM10.949 44.6514L63.1063 82.0342L115.264 44.6514L63.1063 10.3838L10.949 44.6514Z" fill="black" />
+                  <path d="M62.1858 110.55L9.19555 70.4635C8.62675 70.0332 8.67835 69.1629 9.29401 68.8028L23.4299 60.5354C23.7759 60.3331 24.2092 60.3569 24.5309 60.5958L62.1847 88.557C62.5389 88.82 63.0236 88.8198 63.3776 88.5565L100.991 60.5804C101.302 60.3493 101.718 60.3183 102.06 60.5009L117.604 68.8125C118.252 69.1591 118.317 70.0631 117.725 70.4992L63.3824 110.557C63.0259 110.82 62.539 110.817 62.1858 110.55Z" fill="black" />
+                  <path d="M98.6332 56.7438C100.188 55.7527 102.14 55.6078 103.825 56.358L104.182 56.5328L119.725 64.8444C123.29 66.7507 123.65 71.7228 120.396 74.1217L66.0522 114.179C64.1528 115.579 61.5807 115.607 59.6557 114.272L59.4711 114.138L6.48087 74.0524C3.35257 71.6859 3.63612 66.8991 7.02189 64.9186L21.1586 56.651L21.3383 56.5504C23.1492 55.5801 25.3524 55.7004 27.0463 56.8629L27.2143 56.983L62.7787 83.3932L98.3061 56.9694L98.6332 56.7438ZM66.0629 92.1676C64.1159 93.6155 61.4504 93.616 59.5024 92.1696H59.5014L23.7045 65.5866L16.0932 70.0387L62.8158 105.383L110.591 70.1657L101.895 65.5153L66.0629 92.1676Z" fill="black" />
+                </svg>
+                Send to Back
+              </button>
 
             </div>
           </div>,
@@ -516,18 +582,35 @@ export default function Page() {
           <div className="layer-btn">
             <button className="handleLayer">Flip</button>
             <div className="layer-two-btn">
-              <button onClick={handleFlipHorizontally}>Flip Horizontally</button>
-              <button onClick={handleFlipVertically}>Flip Vertically</button>
+              <button onClick={handleFlipHorizontally} className="d-flex align-items-center justify-content-center" >
+                <svg width="18" height="18" viewBox="0 0 154 121" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M72.5 2.5V120.5H0.823242L64.9736 0.613281L72.5 2.5ZM14.1768 112.5H64.5V18.4521L14.1768 112.5Z" fill="black" />
+                  <path d="M86 116V2L147 116H86Z" fill="black" />
+                  <path d="M82 2V120H153.677L89.5264 0.113281L82 2ZM140.323 112H90V17.9521L140.323 112Z" fill="black" />
+                </svg>
+                Flip Horizontally
+              </button>
+              <button onClick={handleFlipVertically} className="d-flex align-items-center justify-content-center" >
+                <svg width="18" height="18" viewBox="0 0 121 154" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2.44336 82.0566L120.443 82.0566L120.443 153.733L0.556638 89.583L2.44336 82.0566ZM112.443 140.38L112.443 90.0566L18.3955 90.0566L112.443 140.38Z" fill="black" />
+                  <path d="M115.943 68.5566L1.94336 68.5566L115.943 7.55664L115.943 68.5566Z" fill="black" />
+                  <path d="M1.94336 72.5566L119.943 72.5566L119.943 0.879878L0.0566434 65.0303L1.94336 72.5566ZM111.943 14.2334L111.943 64.5566L17.8955 64.5566L111.943 14.2334Z" fill="black" />
+                </svg>
+                Flip Vertically
+              </button>
             </div>
           </div>,
         svg: (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M11 2V22H13V2H11ZM7 6V18H4L4 6H7ZM4 4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H7C8.10457 20 9 19.1046 9 18V6C9 4.89543 8.10457 4 7 4H4ZM15 6C15 4.89543 15.8954 4 17 4H20C21.1046 4 22 4.89543 22 6V18C22 19.1046 21.1046 20 20 20H17C15.8954 20 15 19.1046 15 18V6Z"></path></svg>
+         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M11 2V22H13V2H11ZM7 6V18H4L4 6H7ZM4 4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H7C8.10457 20 9 19.1046 9 18V6C9 4.89543 8.10457 4 7 4H4ZM15 6C15 4.89543 15.8954 4 17 4H20C21.1046 4 22 4.89543 22 6V18C22 19.1046 21.1046 20 20 20H17C15.8954 20 15 19.1046 15 18V6Z"></path></svg>
         ),
       },
       {
         label: <button className="" onClick={handleDuplicate}>Duplicate</button>,
         svg: (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z"></path></svg>
+          <svg width="18" height="18" viewBox="0 0 112 113" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M40.5 105H104V27H40.5V105ZM112 108C112 110.761 109.761 113 107 113H37.5C34.8247 113 32.6405 110.899 32.5068 108.257L32.5 108V24C32.5 21.2386 34.7386 19 37.5 19H107C109.761 19 112 21.2386 112 24V108Z" fill="black" />
+            <path d="M80 12.5C80 14.7091 78.2091 16.5 76 16.5C73.7909 16.5 72 14.7091 72 12.5V8H8V85H25.5C27.7091 85 29.5 86.7909 29.5 89C29.5 91.2091 27.7091 93 25.5 93H5C2.23858 93 0 90.7614 0 88V5C2.64876e-08 2.23857 2.23858 2.57702e-07 5 0H75C77.7614 4.02673e-09 80 2.23858 80 5V12.5Z" fill="black" />
+          </svg>
         ),
       },
     ],
