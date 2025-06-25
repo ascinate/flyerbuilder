@@ -115,12 +115,12 @@ export default function Page() {
     applyColorToSelectedText(color);
   };
 
-  const handleContentChange = (id, html) => {
-  setElements((prev) =>
-    prev.map((el) => (el.id === id ? { ...el, content: html } : el))
-  );
-};
-
+  const handleContentChange = (id) => {
+    const html = editorRefs.current[id]?.innerHTML;
+    setElements((prev) =>
+      prev.map((el) => (el.id === id ? { ...el, content: html } : el))
+    );
+  };
 
   const addTextElement = () => {
     const newId = Date.now();
@@ -433,7 +433,7 @@ export default function Page() {
   const menuData = [
     [
       {
-        label: <span onClick={handleReset}>Reset</span>,
+        label: <button onClick={handleReset}>Reset</button>,
         svg: (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
             <path d="M12 4C9.25144 4 6.82508 5.38626 5.38443 7.5H8V9.5H2V3.5H4V5.99936C5.82381 3.57166 8.72764 2 12 2C17.5228 2 22 6.47715 22 12H20C20 7.58172 16.4183 4 12 4ZM4 12C4 16.4183 7.58172 20 12 20C14.7486 20 17.1749 18.6137 18.6156 16.5H16V14.5H22V20.5H20V18.0006C18.1762 20.4283 15.2724 22 12 22C6.47715 22 2 17.5228 2 12H4Z"></path>
@@ -441,7 +441,7 @@ export default function Page() {
         ),
       },
       {
-        label: <span onClick={handleUndo}>Undo</span>,
+        label: <button onClick={handleUndo}>Undo</button>,
         svg: (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
             <path d="M5.82843 6.99955L8.36396 9.53509L6.94975 10.9493L2 5.99955L6.94975 1.0498L8.36396 2.46402L5.82843 4.99955H13C17.4183 4.99955 21 8.58127 21 12.9996C21 17.4178 17.4183 20.9996 13 20.9996H4V18.9996H13C16.3137 18.9996 19 16.3133 19 12.9996C19 9.68584 16.3137 6.99955 13 6.99955H5.82843Z"></path>
@@ -449,7 +449,7 @@ export default function Page() {
         ),
       },
       {
-        label: <span onClick={handleRedo}>Redo</span>,
+        label: <button onClick={handleRedo}>Redo</button>,
         svg: (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
             <path d="M18.1716 6.99955H11C7.68629 6.99955 5 9.68584 5 12.9996C5 16.3133 7.68629 18.9996 11 18.9996H20V20.9996H11C6.58172 20.9996 3 17.4178 3 12.9996C3 8.58127 6.58172 4.99955 11 4.99955H18.1716L15.636 2.46402L17.0503 1.0498L22 5.99955L17.0503 10.9493L15.636 9.53509L18.1716 6.99955Z"></path>
@@ -457,7 +457,7 @@ export default function Page() {
         ),
       },
       {
-        label: <span onClick={deleteAllElements}>Delete</span>,
+        label: <button onClick={deleteAllElements}>Delete</button>,
         svg: (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
             <path d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z"></path>
@@ -469,7 +469,7 @@ export default function Page() {
       {
         label:
           <div className="opacity-btn">
-            <span className="handleLayer">Opacity</span>
+            <button className="handleLayer">Opacity</button>
             <div className="layer-two-btn">
               <input
                 type="range"
@@ -553,23 +553,23 @@ export default function Page() {
       {
         label:
           <div className="layer-btn">
-            <span className="handleLayer">Layer</span>
+            <button className="handleLayer">Layer</button>
             <div className="layer-two-btn">
-              <span className="d-flex align-items-center justify-content-center" onClick={() => handleBringFont(selectedId)}>
+              <button className="d-flex align-items-center justify-content-center" onClick={() => handleBringFont(selectedId)}>
                 <svg width="18" height="18" viewBox="0 0 118 109" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M60.2722 81.7364L116.846 41.188C117.987 40.3701 117.953 38.6618 116.779 37.8909L60.2053 0.721549C59.5387 0.283571 58.6756 0.283573 58.0089 0.721551L1.43501 37.8909C0.261643 38.6618 0.226975 40.3701 1.3681 41.188L57.942 81.7364C58.6385 82.2356 59.5757 82.2356 60.2722 81.7364Z" fill="black" />
                   <path d="M107.462 59.9217C109.912 58.1259 113.354 58.6554 115.15 61.1052C116.946 63.555 116.415 66.9969 113.965 68.7927L59.318 108.85L6.01425 68.7527L5.79257 68.5769C3.5587 66.7123 3.15636 63.4022 4.92538 61.0506C6.69443 58.699 9.98619 58.1682 12.3971 59.7976L12.6275 59.9617L59.4019 95.1492L107.462 59.9217Z" fill="black" />
                 </svg>
                 Bring to Front
-              </span>
-              <span className="d-flex align-items-center justify-content-center" onClick={() => handleSendBack(selectedId)}>
+              </button>
+              <button className="d-flex align-items-center justify-content-center" onClick={() => handleSendBack(selectedId)}>
                 <svg width="18" height="18" viewBox="0 0 127 116" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M59.743 1.83105C61.8792 0.538506 64.5769 0.582157 66.6756 1.96093L123.25 39.1299C127.063 41.6353 127.176 47.1876 123.468 49.8457L66.8934 90.3935C64.6297 92.016 61.5838 92.016 59.3201 90.3935L2.74689 49.8457C-0.961729 47.1876 -0.849662 41.6354 2.96369 39.1299L59.5379 1.96093L59.743 1.83105ZM10.949 44.6514L63.1063 82.0342L115.264 44.6514L63.1063 10.3838L10.949 44.6514Z" fill="black" />
                   <path d="M62.1858 110.55L9.19555 70.4635C8.62675 70.0332 8.67835 69.1629 9.29401 68.8028L23.4299 60.5354C23.7759 60.3331 24.2092 60.3569 24.5309 60.5958L62.1847 88.557C62.5389 88.82 63.0236 88.8198 63.3776 88.5565L100.991 60.5804C101.302 60.3493 101.718 60.3183 102.06 60.5009L117.604 68.8125C118.252 69.1591 118.317 70.0631 117.725 70.4992L63.3824 110.557C63.0259 110.82 62.539 110.817 62.1858 110.55Z" fill="black" />
                   <path d="M98.6332 56.7438C100.188 55.7527 102.14 55.6078 103.825 56.358L104.182 56.5328L119.725 64.8444C123.29 66.7507 123.65 71.7228 120.396 74.1217L66.0522 114.179C64.1528 115.579 61.5807 115.607 59.6557 114.272L59.4711 114.138L6.48087 74.0524C3.35257 71.6859 3.63612 66.8991 7.02189 64.9186L21.1586 56.651L21.3383 56.5504C23.1492 55.5801 25.3524 55.7004 27.0463 56.8629L27.2143 56.983L62.7787 83.3932L98.3061 56.9694L98.6332 56.7438ZM66.0629 92.1676C64.1159 93.6155 61.4504 93.616 59.5024 92.1696H59.5014L23.7045 65.5866L16.0932 70.0387L62.8158 105.383L110.591 70.1657L101.895 65.5153L66.0629 92.1676Z" fill="black" />
                 </svg>
                 Send to Back
-              </span>
+              </button>
 
             </div>
           </div>,
@@ -580,32 +580,32 @@ export default function Page() {
       {
         label:
           <div className="layer-btn">
-            <span className="handleLayer">Flip</span>
+            <button className="handleLayer">Flip</button>
             <div className="layer-two-btn">
-              <span onClick={handleFlipHorizontally} className="d-flex align-items-center justify-content-center" >
+              <button onClick={handleFlipHorizontally} className="d-flex align-items-center justify-content-center" >
                 <svg width="18" height="18" viewBox="0 0 154 121" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M72.5 2.5V120.5H0.823242L64.9736 0.613281L72.5 2.5ZM14.1768 112.5H64.5V18.4521L14.1768 112.5Z" fill="black" />
                   <path d="M86 116V2L147 116H86Z" fill="black" />
                   <path d="M82 2V120H153.677L89.5264 0.113281L82 2ZM140.323 112H90V17.9521L140.323 112Z" fill="black" />
                 </svg>
                 Flip Horizontally
-              </span>
-              <span onClick={handleFlipVertically} className="d-flex align-items-center justify-content-center" >
+              </button>
+              <button onClick={handleFlipVertically} className="d-flex align-items-center justify-content-center" >
                 <svg width="18" height="18" viewBox="0 0 121 154" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M2.44336 82.0566L120.443 82.0566L120.443 153.733L0.556638 89.583L2.44336 82.0566ZM112.443 140.38L112.443 90.0566L18.3955 90.0566L112.443 140.38Z" fill="black" />
                   <path d="M115.943 68.5566L1.94336 68.5566L115.943 7.55664L115.943 68.5566Z" fill="black" />
                   <path d="M1.94336 72.5566L119.943 72.5566L119.943 0.879878L0.0566434 65.0303L1.94336 72.5566ZM111.943 14.2334L111.943 64.5566L17.8955 64.5566L111.943 14.2334Z" fill="black" />
                 </svg>
                 Flip Vertically
-              </span>
+              </button>
             </div>
           </div>,
         svg: (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M11 2V22H13V2H11ZM7 6V18H4L4 6H7ZM4 4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H7C8.10457 20 9 19.1046 9 18V6C9 4.89543 8.10457 4 7 4H4ZM15 6C15 4.89543 15.8954 4 17 4H20C21.1046 4 22 4.89543 22 6V18C22 19.1046 21.1046 20 20 20H17C15.8954 20 15 19.1046 15 18V6Z"></path></svg>
+         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M11 2V22H13V2H11ZM7 6V18H4L4 6H7ZM4 4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H7C8.10457 20 9 19.1046 9 18V6C9 4.89543 8.10457 4 7 4H4ZM15 6C15 4.89543 15.8954 4 17 4H20C21.1046 4 22 4.89543 22 6V18C22 19.1046 21.1046 20 20 20H17C15.8954 20 15 19.1046 15 18V6Z"></path></svg>
         ),
       },
       {
-        label: <span className="" onClick={handleDuplicate}>Duplicate</span>,
+        label: <button className="" onClick={handleDuplicate}>Duplicate</button>,
         svg: (
           <svg width="18" height="18" viewBox="0 0 112 113" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M40.5 105H104V27H40.5V105ZM112 108C112 110.761 109.761 113 107 113H37.5C34.8247 113 32.6405 110.899 32.5068 108.257L32.5 108V24C32.5 21.2386 34.7386 19 37.5 19H107C109.761 19 112 21.2386 112 24V108Z" fill="black" />
@@ -869,51 +869,46 @@ export default function Page() {
                           >
                             {el.type === "text" ? (
                               // i replase textarea here
-                              <>
+                          <>
+                          
+                          
+<div
+  ref={(ref) => (editorRefs.current[el.id] = ref)}
+  contentEditable
+  suppressContentEditableWarning={true}
+  onFocus={(e) => {
+    if (el.content === "Edit me!") {
+      e.currentTarget.textContent = ""; 
+    }
+  }}
 
-                                <>
-
-
-                                  <div
-                                    ref={(ref) => (editorRefs.current[el.id] = ref)}
-                                    contentEditable
-                                    suppressContentEditableWarning={true}
-                                    onFocus={(e) => {
-                                      if (el.content === "Edit me!") {
-                                        e.currentTarget.textContent = "";
-                                      }
-                                    }}
-
-                                    onBlur={(e) => {
-                                      const text = e.currentTarget.textContent || "";
-                                      handleContentChange(el.id, text);
-                                    }}
-                                    style={{
-                                      width: "100%",
-                                      height: "100%",
-                                      fontSize: `${textStyles.input1.textSize}px`,
-                                      textAlign: textStyles.input1.alignment,
-                                      fontFamily: textStyles.input1.fontFamily,
-                                      textTransform: textStyles.input1.textTransform,
-                                      letterSpacing: `${textStyles.input1.letterSpacing}px`,
-                                      fontWeight: textStyles.input1.fontWeight,
-                                      fontStyle: textStyles.input1.fontStyle,
-                                      outline: "none",
-                                      overflow: "auto",
-                                      background: "transparent",
-                                      color: textStyles.input1.textColor,
-                                      transform: `scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
-                                      opacity: el.opacity ?? 1,
-                                    }}
-                                  >
-                                    {el.content}
-                                  </div>
+  onBlur={(e) => {
+    const text = e.currentTarget.textContent || ""; 
+    handleContentChange(el.id, text);
+  }}
+  style={{
+    width: "100%",
+    height: "100%",
+    fontSize: `${textStyles.input1.textSize}px`,
+    textAlign: textStyles.input1.alignment,
+    fontFamily: textStyles.input1.fontFamily,
+    textTransform: textStyles.input1.textTransform,
+    letterSpacing: `${textStyles.input1.letterSpacing}px`,
+    fontWeight: textStyles.input1.fontWeight,
+    fontStyle: textStyles.input1.fontStyle,
+    outline: "none",
+    overflow: "auto",
+    background: "transparent",
+    color: textStyles.input1.textColor,
+    transform: `scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
+    opacity: el.opacity ?? 1,
+  }}
+>
+  {el.content}
+</div>
 
 
-                                </>
-
-
-                              </>
+                          </>
                             ) : (
                               <img
                                 src={el.src}
