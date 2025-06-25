@@ -413,7 +413,9 @@ textarea {
 /* canvas end */
 .sub-navbar {
   padding-inline: 10px;
-
+  & span {
+    color: #3d3d43;
+  }
   &:hover {
     background-color: #d6d6d6;
     border-radius: 10px;
@@ -433,12 +435,13 @@ textarea {
     background-color: var(--white-color);
     display: none;
 
-    & button {
+    & span {
       display: block;
+      margin: 0;
       width: 100%;
     }
 
-    & button:hover {
+    & span:hover {
       background-color: lightgray;
     }
   }
@@ -462,12 +465,12 @@ textarea {
     background-color: var(--white-color);
     display: none;
 
-    & button {
+    & span {
       display: block;
       width: 100%;
     }
 
-    & button:hover {
+    & span:hover {
       background-color: red;
     }
   }
