@@ -3,13 +3,18 @@
 import Image from "next/image";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState, useRef } from "react";
+
+//component
 import Template from "./component/Template";
 import Navbar from "./component/Navbar";
-import { Rnd } from "react-rnd";
 
-
-
+//npm package
 import * as htmlToImage from 'html-to-image';
+import { Rnd } from "react-rnd";
+import { jsPDF } from "jspdf";
+
+
+
 
 export default function Page() {
 
@@ -19,25 +24,50 @@ export default function Page() {
   const handleDownload = async () => {
     if (!designRef.current) return;
 
-    const dataUrl = await htmlToImage.toJpeg(designRef.current, { quality: 1 });
-
-    const link = document.createElement('a');
-    if (format === 'jpg') {
-      link.download = 'design.jpg';
+    if (format === "jpg") {
+      const dataUrl = await htmlToImage.toJpeg(designRef.current, {
+        quality: 1,
+        pixelRatio: 2,
+      });
+      const link = document.createElement("a");
+      link.download = "design.jpg";
       link.href = dataUrl;
       link.click();
-    } else if (format === 'psd' || format === 'ai') {
-      // Trick: save as .jpg, then rename extension
+    } else if (format === "psd" || format === "ai") {
+      const dataUrl = await htmlToImage.toJpeg(designRef.current, {
+        quality: 1,
+        pixelRatio: 2,
+      });
       const blob = await (await fetch(dataUrl)).blob();
-      const renamedFile = new File([blob], `design.${format}`, { type: 'image/jpeg' });
-
+      const renamedFile = new File([blob], `design.${format}`, {
+        type: "image/jpeg",
+      });
       const url = URL.createObjectURL(renamedFile);
+      const link = document.createElement("a");
       link.href = url;
       link.download = `design.${format}`;
       link.click();
       URL.revokeObjectURL(url);
+    } else if (format === "pdf") {
+
+      const dataUrl = await htmlToImage.toPng(designRef.current, {
+        quality: 1,
+        pixelRatio: 2,
+      });
+      const elementWidth = designRef.current.scrollWidth;
+      const elementHeight = designRef.current.scrollHeight;
+
+      const pdf = new jsPDF({
+        orientation: elementWidth > elementHeight ? "l" : "p",
+        unit: "px",
+        format: [elementWidth, elementHeight],
+      });
+
+      pdf.addImage(dataUrl, "PNG", 0, 0, elementWidth, elementHeight);
+      pdf.save("design.pdf");
     }
   };
+
 
   const [textStyles, setTextStyles] = useState({
     input1: {
@@ -307,14 +337,14 @@ export default function Page() {
   };
 
 
-const handleOpacityChange = (id, value) => {
-  const opacity = Math.min(Math.max(value, 0), 1); // Ensure range 0–1
-  setElements((prev) =>
-    prev.map((el) =>
-      el.id === id ? { ...el, opacity } : el
-    )
-  );
-};
+  const handleOpacityChange = (id, value) => {
+    const opacity = Math.min(Math.max(value, 0), 1); // Ensure range 0–1
+    setElements((prev) =>
+      prev.map((el) =>
+        el.id === id ? { ...el, opacity } : el
+      )
+    );
+  };
 
 
   const [elements, setElements] = useState([
@@ -374,12 +404,12 @@ const handleOpacityChange = (id, value) => {
 
 
 
-  const handleTextChange = (id, newText) => {
-    saveToHistory();
-    setElements((prev) =>
-      prev.map((el) => (el.id === id ? { ...el, content: newText } : el))
-    );
-  };
+  // const handleTextChange = (id, newText) => {
+  //   saveToHistory();
+  //   setElements((prev) =>
+  //     prev.map((el) => (el.id === id ? { ...el, content: newText } : el))
+  //   );
+  // };
 
 
 
@@ -424,29 +454,29 @@ const handleOpacityChange = (id, value) => {
       {
         label:
           <div className="opacity-btn">
-  <button className="handleLayer">Opacity</button>
-  <div className="layer-two-btn">
-    <input
-      type="range"
-      min="0"
-      max="1"
-      step="0.01"
-      value={elements.find((el) => el.id === selectedId)?.opacity || 1}
-      onChange={(e) =>
-        handleOpacityChange(selectedId, parseFloat(e.target.value))
-      }
-    />
-    <input
-      type="text"
-      value={elements.find((el) => el.id === selectedId)?.opacity || 1}
-      onChange={(e) =>
-        handleOpacityChange(selectedId, parseFloat(e.target.value))
-      }
-      className="opacity-level"
-    />
-  </div>
-</div>
-,
+            <button className="handleLayer">Opacity</button>
+            <div className="layer-two-btn">
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={elements.find((el) => el.id === selectedId)?.opacity || 1}
+                onChange={(e) =>
+                  handleOpacityChange(selectedId, parseFloat(e.target.value))
+                }
+              />
+              <input
+                type="text"
+                value={elements.find((el) => el.id === selectedId)?.opacity || 1}
+                onChange={(e) =>
+                  handleOpacityChange(selectedId, parseFloat(e.target.value))
+                }
+                className="opacity-level"
+              />
+            </div>
+          </div>
+        ,
 
         svg: (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19.5761 14.5764L15.7067 10.707C15.3162 10.3164 14.683 10.3164 14.2925 10.707L6.86484 18.1346C5.11358 16.6671 4 14.4636 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 12.9014 19.8509 13.7679 19.5761 14.5764ZM8.58927 19.2386L14.9996 12.8283L18.6379 16.4666C17.1992 18.6003 14.7613 19.9998 11.9996 19.9998C10.7785 19.9998 9.62345 19.7268 8.58927 19.2386ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM11 10C11 11.1046 10.1046 12 9 12C7.89543 12 7 11.1046 7 10C7 8.89543 7.89543 8 9 8C10.1046 8 11 8.89543 11 10Z"></path></svg>
@@ -765,7 +795,6 @@ const handleOpacityChange = (id, value) => {
                                   opacity: el.opacity ?? 1
                                 }}
                               />
-
                             ) : (
                               <img
                                 src={el.src}
@@ -815,6 +844,7 @@ const handleOpacityChange = (id, value) => {
                       <option value="psd">.psd</option>
                       <option value="ai">.ai</option>
                       <option value="jpg">.jpg</option>
+                      <option value="pdf">.pdf</option>
                     </select>
 
                     <button onClick={handleDownload} className="btn btn-primary nav-btn">
@@ -1109,9 +1139,6 @@ const handleOpacityChange = (id, value) => {
                             </button>
                           </div>
                         )}
-
-
-
                       </div>
                     </div>
                   </div>
