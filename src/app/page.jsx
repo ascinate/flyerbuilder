@@ -17,7 +17,6 @@ import { jsPDF } from "jspdf";
 
 
 export default function Page() {
-
   const designRef = useRef(null);
   const [format, setFormat] = useState('jpg');
 
@@ -360,7 +359,7 @@ export default function Page() {
       flipHorizontal: false,
       flipVertical: false,
       opacity: 1,
-
+  rotation: 0,
     },
     {
       id: 2,
@@ -374,6 +373,7 @@ export default function Page() {
       flipHorizontal: false,
       flipVertical: false,
       opacity: 1,
+        rotation: 0,
     },
     {
       id: 3,
@@ -387,6 +387,7 @@ export default function Page() {
       flipHorizontal: false,
       flipVertical: false,
       opacity: 1,
+        rotation: 0,
     },
     {
       id: 4,
@@ -400,6 +401,7 @@ export default function Page() {
       flipHorizontal: false,
       flipVertical: false,
       opacity: 1,
+        rotation: 0,
     },
   ]);
 
@@ -861,7 +863,11 @@ export default function Page() {
                           style={{
                             border: selectedId === el.id ? "1px dashed #333" : "none",
                             padding: "4px",
-                            zIndex: el.zIndex
+                            zIndex: el.zIndex,
+                                                        transform: `
+    rotate(${el.rotation || 0}deg) 
+    scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})
+  `,
                           }}
                         >
                           <div
@@ -904,6 +910,10 @@ export default function Page() {
                                       color: textStyles.input1.textColor,
                                       transform: `scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
                                       opacity: el.opacity ?? 1,
+                                                                          transform: `
+    rotate(${el.rotation || 0}deg) 
+    scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})
+  `,
                                     }}
                                   >
                                     {el.content}
@@ -924,7 +934,12 @@ export default function Page() {
                                   objectFit: "contain",
                                   pointerEvents: "none",
                                   transform: `scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
-                                  opacity: el.opacity ?? 1
+                                  opacity: el.opacity ?? 1,
+                                                                    transform: `
+    rotate(${el.rotation || 0}deg) 
+    scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})
+  `,
+     
                                 }}
                               />
                             )}
@@ -1196,6 +1211,7 @@ export default function Page() {
                               },
                             }))
                           }
+                          className="common-value"
                         />
                       </div>
 
@@ -1233,6 +1249,39 @@ export default function Page() {
                               ))}
                             </ul>
                           )} */}
+                        </div>
+
+
+                         <div className="d-flex">
+                          <p>rotate</p>
+                          <input
+                            type="range"
+                            min="0"
+                            max="360"
+                            value={elements.find((el) => el.id === selectedId)?.rotation || 0}
+                            onChange={(e) => {
+                              const newRotation = parseInt(e.target.value);
+                              setElements((prev) =>
+                                prev.map((el) =>
+                                  el.id === selectedId ? { ...el, rotation: newRotation } : el
+                                )
+                              );
+                            }}
+                          />
+                          <input
+                            type="text"
+                            value={`${elements.find((el) => el.id === selectedId)?.rotation || 0}°`}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value.replace(/\D/g, "")) || 0;
+                              const bounded = Math.min(Math.max(value, 0), 360);
+                              setElements((prev) =>
+                                prev.map((el) =>
+                                  el.id === selectedId ? { ...el, rotation: bounded } : el
+                                )
+                              );
+                            }}
+                            className="common-value"
+                          />
                         </div>
                       </div>
                     </div>
