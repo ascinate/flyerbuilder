@@ -487,3 +487,15 @@ border-radius: 8px;
   width: 50px;
   background-color: var(--white-color);
 }
+
+.image-tab-img{
+  width: 180px !important;
+  height: 100px;
+  & img {
+    margin-top: 10px;
+  }
+}
+
+.shape-svg{
+    width: 100px;
+}

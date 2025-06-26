@@ -211,7 +211,7 @@ export default function Page() {
     setElements((prev) => [...prev, newImage]);
   }
 
-  const shapes = [
+const shapes = [
     {
       key: 'shape1',
       svg: (
@@ -247,7 +247,23 @@ export default function Page() {
       ),
     },
 
-
+    {
+      key: 'shape4',
+      svg: (
+        <svg
+          width="150"
+          height="150"
+          viewBox="0 0 600 300"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M146.98 267.934C100.383 249.267 30.3811 241.476 0 239.846V300.137L600 300V-0.401733H465.172C386.5 40.5 334 158.5 313.087 218.633C282 294 189.945 283.365 146.98 267.934Z"
+            fill="#0192DC"
+          />
+        </svg>
+      ),
+    },
   ];
 
 
@@ -974,12 +990,19 @@ export default function Page() {
                                     color: textStyles.input1.textColor,
                                     transform: `scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
                                     opacity: el.opacity ?? 1,
-                                    transform: `rotate(${el.rotation || 0}deg)  scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
+                                    transform: `
+    rotate(${el.rotation || 0}deg) 
+    scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})
+  `,
                                   }}
                                 >
                                   {el.content}
                                 </div>
+
+
                               </>
+
+
                             ) : (
                               <img
                                 src={el.src}
@@ -991,7 +1014,11 @@ export default function Page() {
                                   pointerEvents: "none",
                                   transform: `scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
                                   opacity: el.opacity ?? 1,
-                                  transform: `rotate(${el.rotation || 0}deg)  scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
+                                  transform: `
+    rotate(${el.rotation || 0}deg) 
+    scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})
+  `,
+
                                 }}
                               />
                             )}
@@ -1384,11 +1411,11 @@ export default function Page() {
 
                     <div className="tab-pane " id="v-pills-settings-shape" role="tabpanel" aria-labelledby="v-pills-settings-shape-tab">
 
-                      <div className="shape-svg">
-                        {shapes.map((shape) => (
-                          <div key={shape.key}>{shape.svg}</div>
-                        ))}
-                      </div>
+         <div className="shape-svg">
+      {shapes.map((shape) => (
+        <div key={shape.key}>{shape.svg}</div>
+      ))}
+    </div>
                     </div>
                   </div>
                 </div>
