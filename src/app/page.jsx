@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 //component
 import Template from "./component/Template";
@@ -211,6 +211,7 @@ export default function Page() {
     setElements((prev) => [...prev, newImage]);
   }
 
+  
   const shapes = [
     {
       key: 'shape1',
@@ -1006,7 +1007,11 @@ export default function Page() {
                                   opacity: el.opacity ?? 1,
                                 }}
                               >
-                                {el.svg}
+                                {React.cloneElement(el.svg, {
+                                  width: "100%",
+                                  height: "100%",
+                                  style: { width: "100%", height: "100%" },
+                                })}
                               </div>
                             )
 
