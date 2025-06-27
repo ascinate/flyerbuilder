@@ -249,6 +249,23 @@ export default function Page() {
 
 
   ];
+  function handleAddShape(shape) {
+    const newshape = {
+      id: Date.now(),
+      type: 'shape',
+      svg: shape.svg,
+      x: 100,
+      y: 100,
+      width: 200,
+      height: 200,
+      rotation: 0,
+      flipHorizontal: false,
+      flipVertical: false,
+      opacity: 1,
+      zIndex: elements.length + 1,
+    };
+    setElements((prev) => [...prev, newshape]);
+  }
 
 
 
@@ -980,21 +997,35 @@ export default function Page() {
                                   {el.content}
                                 </div>
                               </>
-                            ) : (
-                              <img
-                                src={el.src}
-                                alt="uploaded"
+                            ) : el.type === "shape" ? (
+                              <div
                                 style={{
                                   width: "100%",
                                   height: "100%",
-                                  objectFit: "contain",
                                   pointerEvents: "none",
-                                  transform: `scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
                                   opacity: el.opacity ?? 1,
-                                  transform: `rotate(${el.rotation || 0}deg)  scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
                                 }}
-                              />
-                            )}
+                              >
+                                {el.svg}
+                              </div>
+                            )
+
+
+                              : (
+                                <img
+                                  src={el.src}
+                                  alt="uploaded"
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "contain",
+                                    pointerEvents: "none",
+                                    transform: `scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
+                                    opacity: el.opacity ?? 1,
+                                    transform: `rotate(${el.rotation || 0}deg)  scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
+                                  }}
+                                />
+                              )}
 
                             {selectedId === el.id && (
                               <button
@@ -1383,10 +1414,15 @@ export default function Page() {
                     </div>
 
                     <div className="tab-pane " id="v-pills-settings-shape" role="tabpanel" aria-labelledby="v-pills-settings-shape-tab">
-
-                      <div className="shape-svg">
-                        {shapes.map((shape) => (
-                          <div key={shape.key}>{shape.svg}</div>
+                      <div className="image-tab-img">
+                        {shapes.map((src, index) => (
+                          <div
+                            key={index}
+                            onClick={() => handleAddShape(src)}
+                            style={{ cursor: "pointer", display: "inline-block", margin: "10px" }}
+                          >
+                            {src.svg}
+                          </div>
                         ))}
                       </div>
                     </div>

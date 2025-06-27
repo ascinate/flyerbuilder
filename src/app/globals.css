@@ -499,3 +499,8 @@ border-radius: 8px;
 .shape-svg{
     width: 100px;
 }
+
+.svg svg{
+  margin-top: 20px;
+  cursor: pointer;
+}
