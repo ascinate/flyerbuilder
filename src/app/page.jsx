@@ -211,7 +211,8 @@ export default function Page() {
     setElements((prev) => [...prev, newImage]);
   }
 
-  
+  const [selectedColor, setSelectedColor] = useState("#000000");
+
   const shapes = [
     {
       key: 'shape1',
@@ -251,10 +252,20 @@ export default function Page() {
 
   ];
   function handleAddShape(shape) {
+    // Clone the shape and override the fill of each path manually
+    const coloredSvg = React.cloneElement(shape.svg, {
+      children: React.Children.map(shape.svg.props.children, (child) => {
+        if (child.type === 'path') {
+          return React.cloneElement(child, { fill: selectedColor });
+        }
+        return child;
+      }),
+    });
+
     const newshape = {
       id: Date.now(),
-      type: 'shape',
-      svg: shape.svg,
+      type: "shape",
+      svg: coloredSvg,
       x: 100,
       y: 100,
       width: 200,
@@ -267,6 +278,7 @@ export default function Page() {
     };
     setElements((prev) => [...prev, newshape]);
   }
+
 
 
 
@@ -632,8 +644,6 @@ export default function Page() {
             <path d="M0 7C0 3.134 3.13401 0 7 0H47V106H7C3.13401 106 0 102.866 0 99V7Z" fill="#474646" />
             <path d="M71 18H81V8H71V18Z" fill="white" />
           </svg>
-
-
         ),
       },
       {
@@ -833,8 +843,8 @@ export default function Page() {
   return (
     <>
       <Navbar />
-      <main className=''>
-        <section className="section-body">
+      <main className='' >
+        <section className="section-body" >
 
           <div className="">
             <div className="row m-0 p-0">
@@ -851,8 +861,9 @@ export default function Page() {
                     </div>
                   ))}
                 </div>
-                <div className="design-area">
-                  <div className="design-area-canvas d-flex flex-col justify-content-center align-content-center" style={{ backgroundColor: textStyles.input1.canvasBackgroundColor }} ref={designRef}>
+                <div className="design-area" onClick={() => setSelectedId(null)}>
+                  <div className="design-area-canvas d-flex flex-col justify-content-center align-content-center" style={{ backgroundColor: textStyles.input1.canvasBackgroundColor }} ref={designRef}
+                  >
                     {/* <input
                       style={{
                         fontSize: `${textStyles.input1.textSize}px`,
@@ -872,7 +883,7 @@ export default function Page() {
                       }}
                       className="canavas_input"
                     /> */}
-
+                    
                     <div className="uploadedImage" >
                       {uploadedImage && (
                         <img
@@ -959,9 +970,6 @@ export default function Page() {
                             {el.type === "text" ? (
                               // i replase textarea here
                               <>
-
-
-
                                 <div
                                   ref={(ref) => (editorRefs.current[el.id] = ref)}
                                   contentEditable
@@ -1419,17 +1427,41 @@ export default function Page() {
                     </div>
 
                     <div className="tab-pane " id="v-pills-settings-shape" role="tabpanel" aria-labelledby="v-pills-settings-shape-tab">
-                      <div className="image-tab-img">
-                        {shapes.map((src, index) => (
-                          <div
-                            key={index}
-                            onClick={() => handleAddShape(src)}
-                            style={{ cursor: "pointer", display: "inline-block", margin: "10px" }}
-                          >
-                            {src.svg}
-                          </div>
-                        ))}
+                      <div className="shapes-tab-img">
+                        <input
+                          type="color"
+                          value={selectedColor}
+                          onChange={(e) => setSelectedColor(e.target.value)}
+                          style={{ marginBottom: "10px" }}
+                        />
+                        {shapes.map((src, index) => {
+                          const coloredPreview = React.cloneElement(src.svg, {
+                            children: React.Children.map(src.svg.props.children, (child) => {
+                              if (child.type === 'path') {
+                                return React.cloneElement(child, { fill: selectedColor });
+                              }
+                              return child;
+                            }),
+                            style: { width: "100%", height: "100%" },
+                          });
+
+                          return (
+                            <div
+                              key={index}
+                              onClick={() => handleAddShape(src)}
+                              style={{
+                                cursor: "pointer",
+                                display: "inline-block",
+                                margin: "10px",
+                              }}
+                            >
+                              {coloredPreview}
+                            </div>
+                          );
+                        })}
+
                       </div>
+
                     </div>
                   </div>
                 </div>
