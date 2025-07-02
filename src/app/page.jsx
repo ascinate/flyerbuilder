@@ -13,9 +13,6 @@ import * as htmlToImage from 'html-to-image';
 import { Rnd } from "react-rnd";
 import { jsPDF } from "jspdf";
 
-
-
-
 export default function Page() {
   const designRef = useRef(null);
   const [format, setFormat] = useState('jpg');
@@ -68,36 +65,13 @@ export default function Page() {
   };
 
 
-  const [textStyles, setTextStyles] = useState({
-    input1: {
-      alignment: 'left',
-      text: "pritam",
-      textSize: 16,
-      // textColor: '#000000',
-      // textColorTwo: '#000000',
-      textTransform: 'none',
-      canvasBackgroundColor: '#ffffff',
-      fontFamily: ' Calibri',
-      fontWeight: 'normal',
-      fontStyle: 'normal',
-      letterSpacing: 0,
-    },
-    // input2: {
-    //   alignment: 'left',
-    //   textSize: 16,
-    //   textColor: '#000000',
-    //   textColorTwo: '#000000',
-    //   textTransform: 'none',
-    //   canvasBackgroundColor: '#ffffff'
-    // },
-
-  });
+  const [textStyles, setTextStyles] = useState({});
 
 
   // *******************************************
 
 
-  const [textColor, setTextColor] = useState("#000000");
+  // const [textColor, setTextColor] = useState("#000000");
 
   const editorRefs = useRef({});
 
@@ -108,11 +82,11 @@ export default function Page() {
 
 
 
-  const handleColorChange = (e) => {
-    const color = e.target.value;
-    setTextColor(color);
-    applyColorToSelectedText(color);
-  };
+  // const handleColorChange = (e) => {
+  //   const color = e.target.value;
+  //   setTextColor(color);
+  //   applyColorToSelectedText(color);
+  // };
 
   const handleContentChange = (id, html) => {
     setElements((prev) =>
@@ -280,10 +254,6 @@ export default function Page() {
   }
 
 
-
-
-
-
   const [history, setHistory] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [redoHistory, setRedoHistory] = useState([]);
@@ -328,11 +298,6 @@ export default function Page() {
     setTextStyles(next.textStyles);
     setRedoHistory((prev) => prev.slice(0, -1));
   };
-
-
-
-
-
 
   const handleUpload = (e) => {
     saveToHistory();
@@ -419,16 +384,23 @@ export default function Page() {
     const elementToDuplicate = elements.find(el => el.id === selectedId);
     if (!elementToDuplicate) return;
 
+    const newId = Date.now();
+
     const duplicatedElement = {
       ...elementToDuplicate,
-      id: Date.now(),
+      id: newId,
       x: elementToDuplicate.x + 20,
       y: elementToDuplicate.y + 20,
       zIndex: Math.max(...elements.map(el => el.zIndex)) + 1,
     };
 
-
     setElements(prevElements => [...prevElements, duplicatedElement]);
+
+
+    setTextStyles(prev => ({
+      ...prev,
+      [newId]: { ...prev[selectedId] },
+    }));
   };
 
 
@@ -500,8 +472,6 @@ export default function Page() {
       rotation: 0,
     },
   ]);
-
-
 
   // const handleTextChange = (id, newText) => {
   //   saveToHistory();
@@ -716,54 +686,65 @@ export default function Page() {
 
   const handleIncrease = (inputKey = 'input1') => {
     saveToHistory();
-    setTextStyles((prev) => ({
-      ...prev,
-      [inputKey]: {
-        ...prev[inputKey],
-        textSize: prev[inputKey].textSize + 1,
-      },
-    }));
+    setTextStyles((prev) => {
+      const current = prev[inputKey] || {};
+      return {
+        ...prev,
+        [inputKey]: {
+          ...current,
+          textSize: (current.textSize || 16) + 1,
+        },
+      };
+    });
   };
 
   const handleDecrease = (inputKey = 'input1') => {
     saveToHistory();
-    if (textStyles[inputKey].textSize > 1) {
-      setTextStyles((prev) => ({
+    setTextStyles((prev) => {
+      const current = prev[inputKey] || {};
+      const newSize = (current.textSize || 16) > 1 ? (current.textSize || 16) - 1 : 1;
+      return {
         ...prev,
         [inputKey]: {
-          ...prev[inputKey],
-          textSize: prev[inputKey].textSize - 1,
+          ...current,
+          textSize: newSize,
         },
-      }));
-    }
+      };
+    });
   };
 
   const handleInputChange = (e, inputKey = 'input1') => {
     saveToHistory();
     const newSize = parseInt(e.target.value, 10);
     if (!isNaN(newSize)) {
-      setTextStyles((prev) => ({
-        ...prev,
-        [inputKey]: {
-          ...prev[inputKey],
-          textSize: newSize,
-        },
-      }));
+      setTextStyles((prev) => {
+        const current = prev[inputKey] || {};
+        return {
+          ...prev,
+          [inputKey]: {
+            ...current,
+            textSize: newSize,
+          },
+        };
+      });
     }
   };
-  const handleCapSamTextHandle = (inputKey = 'input1') => {
+  const handleCapSamTextHandle = (inputKey) => {
+    if (!inputKey) return;
     saveToHistory();
-    setTextStyles((prev) => ({
-      ...prev,
-      [inputKey]: {
-        ...prev[inputKey],
-        textTransform:
-          prev[inputKey].textTransform === 'uppercase'
-            ? 'lowercase'
-            : 'uppercase',
-      },
-    }));
+    setTextStyles((prev) => {
+      const current = prev[inputKey] || {};
+      return {
+        ...prev,
+        [inputKey]: {
+          ...current,
+          textTransform:
+            current.textTransform === 'uppercase' ? 'lowercase' : 'uppercase',
+        },
+      };
+    });
   };
+
   const updateTextStyle = (inputKey, key, value) => {
     setTextStyles((prev) => ({
       ...prev,
@@ -840,12 +821,39 @@ export default function Page() {
     { label: "Baskerville", value: "Baskerville, 'Baskerville Old Face', Georgia, serif" },
   ];
 
+
+  // delete form keyboad
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Delete" && selectedId) {
+        const activeElement = document.activeElement;
+
+        // Check if currently editing a contentEditable div
+        const isEditingText =
+          activeElement &&
+          (activeElement.getAttribute("contenteditable") === "true" ||
+            activeElement.closest('[contenteditable="true"]'));
+
+        if (!isEditingText) {
+          e.preventDefault(); // prevent browser default delete behavior
+          deleteElement(selectedId);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedId]);
+
+
+  const [canvasBackgroundColor, setCanvasBackgroundColor] = useState('#ffffff');
+
+
   return (
     <>
       <Navbar />
       <main className='' >
         <section className="section-body" >
-
           <div className="">
             <div className="row m-0 p-0">
               <div className="col-lg-8">
@@ -862,8 +870,7 @@ export default function Page() {
                   ))}
                 </div>
                 <div className="design-area" onClick={() => setSelectedId(null)}>
-                  <div className="design-area-canvas d-flex flex-col justify-content-center align-content-center" style={{ backgroundColor: textStyles.input1.canvasBackgroundColor }} ref={designRef}
-                  >
+                  <div className="design-area-canvas d-flex flex-col justify-content-center align-content-center" style={{ backgroundColor: canvasBackgroundColor }}>
                     {/* <input
                       style={{
                         fontSize: `${textStyles.input1.textSize}px`,
@@ -958,10 +965,7 @@ export default function Page() {
                           style={{
                             border: selectedId === el.id ? "1px dashed #333" : "none",
                             zIndex: el.zIndex,
-                            transform: `
-    rotate(${el.rotation || 0}deg) 
-    scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})
-  `,
+                            transform: ` rotate(${el.rotation || 0}deg) scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
                           }}
                         >
                           <div
@@ -987,20 +991,20 @@ export default function Page() {
                                   style={{
                                     width: "100%",
                                     height: "100%",
-                                    fontSize: `${textStyles.input1.textSize}px`,
-                                    textAlign: textStyles.input1.alignment,
-                                    fontFamily: textStyles.input1.fontFamily,
-                                    textTransform: textStyles.input1.textTransform,
-                                    letterSpacing: `${textStyles.input1.letterSpacing}px`,
-                                    fontWeight: textStyles.input1.fontWeight,
-                                    fontStyle: textStyles.input1.fontStyle,
+                                    fontSize: `${textStyles[el.id]?.textSize || 16}px`,
+                                    textAlign: textStyles[el.id]?.alignment || 'left',
+                                    fontFamily: textStyles[el.id]?.fontFamily || 'Calibri',
+                                    textTransform: textStyles[el.id]?.textTransform || 'none',
+                                    letterSpacing: `${textStyles[el.id]?.letterSpacing || 0}px`,
+                                    fontWeight: textStyles[el.id]?.fontWeight || 'normal',
+                                    fontStyle: textStyles[el.id]?.fontStyle || 'normal',
+                                    color: textStyles[el.id]?.textColor || '#000000',
+                                    backgroundColor: textStyles[el.id]?.canvasBackgroundColor || '#ffffff',
                                     outline: "none",
                                     overflow: "auto",
                                     background: "transparent",
-                                    color: textStyles.input1.textColor,
-                                    transform: `scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
+                                    transform: `rotate(${el.rotation || 0}deg) scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
                                     opacity: el.opacity ?? 1,
-                                    transform: `rotate(${el.rotation || 0}deg)  scale(${el.flipHorizontal ? -1 : 1}, ${el.flipVertical ? -1 : 1})`,
                                   }}
                                 >
                                   {el.content}
@@ -1024,8 +1028,6 @@ export default function Page() {
                                 })}
                               </div>
                             )
-
-
                               : (
                                 <img
                                   src={el.src}
@@ -1053,8 +1055,8 @@ export default function Page() {
                                   color: "#fff",
                                   border: "none",
                                   borderRadius: "50%",
-                                  width: "24px",
-                                  height: "24px",
+                                  width: "25px",
+                                  height: "25px",
                                   cursor: "pointer",
                                 }}
                               >
@@ -1070,7 +1072,6 @@ export default function Page() {
                   </div>
                 </div>
                 <div className="design-footer">
-
                   <div style={{ marginTop: 20 }}>
                     <select value={format} onChange={(e) => setFormat(e.target.value)} className="footer-btn">
                       <option value="psd">.psd</option>
@@ -1078,7 +1079,6 @@ export default function Page() {
                       <option value="jpg">.jpg</option>
                       <option value="pdf">.pdf</option>
                     </select>
-
                     <button onClick={handleDownload} className="btn btn-primary nav-btn">
                       Download
                     </button>
@@ -1112,24 +1112,30 @@ export default function Page() {
                   </div>
                   <div className="tab-content" id="v-pills-tabContent">
                     <div className="tab-pane active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                      <Template />
+                      <div className="template-container">
+
+           <Template onSelectImage={(src) => setUploadedImage(src)} />
+                      </div>
+
                     </div>
                     <div className="tab-pane  " id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                       <div className="d-flex justify-content-between w-100">
                         <button
                           className="text-alignment"
                           onClick={() => {
+                            if (!selectedId) return;
                             saveToHistory();
-                            setTextStyles((prev) => ({
-                              ...prev,
-                              input1: {
-                                ...prev.input1,
-                                alignment: 'left',
-                              },
-                            }))
-                          }
-
-                          }
+                            setTextStyles((prev) => {
+                              const current = prev[selectedId] || {};
+                              return {
+                                ...prev,
+                                [selectedId]: {
+                                  ...current,
+                                  alignment: 'left',
+                                },
+                              };
+                            });
+                          }}
                         >
                           <Image src="/left.webp" width={40} height={40} alt="left align" />
                         </button>
@@ -1137,16 +1143,19 @@ export default function Page() {
                         <button
                           className="text-alignment"
                           onClick={() => {
+                            if (!selectedId) return;
                             saveToHistory();
-                            setTextStyles((prev) => ({
-                              ...prev,
-                              input1: {
-                                ...prev.input1,
-                                alignment: 'center',
-                              },
-                            }))
-                          }
-                          }
+                            setTextStyles((prev) => {
+                              const current = prev[selectedId] || {};
+                              return {
+                                ...prev,
+                                [selectedId]: {
+                                  ...current,
+                                  alignment: 'center',
+                                },
+                              };
+                            });
+                          }}
                         >
                           <Image src="/center.webp" width={40} height={40} alt="center align" />
                         </button>
@@ -1154,32 +1163,37 @@ export default function Page() {
                         <button
                           className="text-alignment"
                           onClick={() => {
+                            if (!selectedId) return;
                             saveToHistory();
-                            setTextStyles((prev) => ({
-                              ...prev,
-                              input1: {
-                                ...prev.input1,
-                                alignment: 'right',
-                              },
-                            }))
-                          }
-                          }
+                            setTextStyles((prev) => {
+                              const current = prev[selectedId] || {};
+                              return {
+                                ...prev,
+                                [selectedId]: {
+                                  ...current,
+                                  alignment: 'right',
+                                },
+                              };
+                            });
+                          }}
                         >
                           <Image src="/right.webp" width={40} height={40} alt="right align" />
                         </button>
                       </div>
 
                       <div className="my-4 w-100">
-                        <button onClick={() => handleDecrease('input1')} className="size-btn btn-decrease">-</button>
+                        <button onClick={() => handleDecrease(selectedId)} className="size-btn btn-decrease">-</button>
                         <input
                           type="number"
-                          value={textStyles.input1.textSize}
-                          onChange={(e) => handleInputChange(e, 'input1')}
+                          value={textStyles[selectedId]?.textSize || 16}
+                          onChange={(e) => handleInputChange(e, selectedId)}
                           style={{ width: "60px" }}
                           className="font-size-input w-50"
                         />
-                        <button className="size-btn btn-increase" onClick={() => handleIncrease('input1')}>+</button>
+                        <button className="size-btn btn-increase" onClick={() => handleIncrease(selectedId)}>+</button>
                       </div>
+
+
                       <div className="d-flex justify-content-around">
                         {/* <input
                           type="color"
@@ -1190,7 +1204,7 @@ export default function Page() {
 
                         <input
                           type="color"
-                          value={textStyles.input1.textColorTwo}
+                          value={textStyles[selectedId]?.textColor || '#ffffff'}
                           onChange={(e) => {
                             const color = e.target.value;
                             updateTextStyle("input1", "textColorTwo", color);
@@ -1203,9 +1217,15 @@ export default function Page() {
                         />
 
 
-                        <button className="size-btn" onClick={() => handleCapSamTextHandle('input1')}>
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20.4668 8.69379L20.7134 8.12811C21.1529 7.11947 21.9445 6.31641 22.9323 5.87708L23.6919 5.53922C24.1027 5.35653 24.1027 4.75881 23.6919 4.57612L22.9748 4.25714C21.9616 3.80651 21.1558 2.97373 20.7238 1.93083L20.4706 1.31953C20.2942 0.893489 19.7058 0.893489 19.5293 1.31953L19.2761 1.93083C18.8442 2.97373 18.0384 3.80651 17.0252 4.25714L16.308 4.57612C15.8973 4.75881 15.8973 5.35653 16.308 5.53922L17.0677 5.87708C18.0555 6.31641 18.8471 7.11947 19.2866 8.12811L19.5331 8.69379C19.7136 9.10792 20.2864 9.10792 20.4668 8.69379ZM2 4C2 3.44772 2.44772 3 3 3H14V5H4V19H20V11H22V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4ZM7 8H17V11H15V10H13V14H14.5V16H9.5V14H11V10H9V11H7V8Z"></path></svg>
+                        <button
+                          className="size-btn"
+                          onClick={() => handleCapSamTextHandle(selectedId)}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                            <path d="M20.4668 8.69379L20.7134 8.12811C21.1529 7.11947 21.9445 6.31641 22.9323 5.87708L23.6919 5.53922C24.1027 5.35653 24.1027 4.75881 23.6919 4.57612L22.9748 4.25714C21.9616 3.80651 21.1558 2.97373 20.7238 1.93083L20.4706 1.31953C20.2942 0.893489 19.7058 0.893489 19.5293 1.31953L19.2761 1.93083C18.8442 2.97373 18.0384 3.80651 17.0252 4.25714L16.308 4.57612C15.8973 4.75881 15.8973 5.35653 16.308 5.53922L17.0677 5.87708C18.0555 6.31641 18.8471 7.11947 19.2866 8.12811L19.5331 8.69379C19.7136 9.10792 20.2864 9.10792 20.4668 8.69379ZM2 4C2 3.44772 2.44772 3 3 3H14V5H4V19H20V11H22V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4ZM7 8H17V11H15V10H13V14H14.5V16H9.5V14H11V10H9V11H7V8Z" />
+                          </svg>
                         </button>
+
                       </div>
 
                       <div className="">
@@ -1229,16 +1249,21 @@ export default function Page() {
                       </div>
                       <div className="">
                         <select
-                          value={textStyles.input1.fontFamily}
-                          onChange={(e) =>
-                            setTextStyles((prev) => ({
-                              ...prev,
-                              input1: {
-                                ...prev.input1,
-                                fontFamily: e.target.value,
-                              },
-                            }))
-                          }
+                          value={textStyles[selectedId]?.fontFamily || "Calibri"}
+                          onChange={(e) => {
+                            if (!selectedId) return;
+                            saveToHistory();
+                            setTextStyles((prev) => {
+                              const current = prev[selectedId] || {};
+                              return {
+                                ...prev,
+                                [selectedId]: {
+                                  ...current,
+                                  fontFamily: e.target.value,
+                                },
+                              };
+                            });
+                          }}
                         >
                           {fontOptions.map((font) => (
                             <option key={font.value} value={font.value}>
@@ -1251,35 +1276,52 @@ export default function Page() {
 
 
 
-                        <button
-                          className="text-alignment"
-                          onClick={() =>
-                            setTextStyles((prev) => ({
-                              ...prev,
-                              input1: {
-                                ...prev.input1,
-                                fontWeight: prev.input1.fontWeight === 'bold' ? 'normal' : 'bold',
-                              },
-                            }))
-                          }
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 11H12.5C13.8807 11 15 9.88071 15 8.5C15 7.11929 13.8807 6 12.5 6H8V11ZM18 15.5C18 17.9853 15.9853 20 13.5 20H6V4H12.5C14.9853 4 17 6.01472 17 8.5C17 9.70431 16.5269 10.7981 15.7564 11.6058C17.0979 12.3847 18 13.837 18 15.5ZM8 13V18H13.5C14.8807 18 16 16.8807 16 15.5C16 14.1193 14.8807 13 13.5 13H8Z"></path></svg>
-                        </button>
 
                         <button
                           className="text-alignment"
-                          onClick={() =>
-                            setTextStyles((prev) => ({
-                              ...prev,
-                              input1: {
-                                ...prev.input1,
-                                fontStyle: prev.input1.fontStyle === 'italic' ? 'normal' : 'italic',
-                              },
-                            }))
-                          }
+                          onClick={() => {
+                            if (!selectedId) return;
+                            saveToHistory();
+                            setTextStyles((prev) => {
+                              const current = prev[selectedId] || {};
+                              return {
+                                ...prev,
+                                [selectedId]: {
+                                  ...current,
+                                  fontWeight: current.fontWeight === 'bold' ? 'normal' : 'bold',
+                                },
+                              };
+                            });
+                          }}
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M15 20H7V18H9.92661L12.0425 6H9V4H17V6H14.0734L11.9575 18H15V20Z"></path></svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                            <path d="M8 11H12.5C13.8807 11 15 9.88071 15 8.5C15 7.11929 13.8807 6 12.5 6H8V11ZM18 15.5C18 17.9853 15.9853 20 13.5 20H6V4H12.5C14.9853 4 17 6.01472 17 8.5C17 9.70431 16.5269 10.7981 15.7564 11.6058C17.0979 12.3847 18 13.837 18 15.5ZM8 13V18H13.5C14.8807 18 16 16.8807 16 15.5C16 14.1193 14.8807 13 13.5 13H8Z" />
+                          </svg>
                         </button>
+
+
+                        <button
+                          className="text-alignment"
+                          onClick={() => {
+                            if (!selectedId) return;
+                            saveToHistory();
+                            setTextStyles((prev) => {
+                              const current = prev[selectedId] || {};
+                              return {
+                                ...prev,
+                                [selectedId]: {
+                                  ...current,
+                                  fontStyle: current.fontStyle === 'italic' ? 'normal' : 'italic',
+                                },
+                              };
+                            });
+                          }}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                            <path d="M15 20H7V18H9.92661L12.0425 6H9V4H17V6H14.0734L11.9575 18H15V20Z" />
+                          </svg>
+                        </button>
+
 
 
                       </div>
@@ -1290,29 +1332,41 @@ export default function Page() {
                           min="0"
                           max="10"
                           step="0.1"
-                          value={textStyles.input1.letterSpacing}
-                          onChange={(e) =>
-                            setTextStyles((prev) => ({
-                              ...prev,
-                              input1: {
-                                ...prev.input1,
-                                letterSpacing: parseFloat(e.target.value),
-                              },
-                            }))
-                          }
+                          value={textStyles[selectedId]?.letterSpacing || 0}
+                          onChange={(e) => {
+                            const spacing = parseFloat(e.target.value);
+                            if (!selectedId) return;
+                            saveToHistory();
+                            setTextStyles((prev) => {
+                              const current = prev[selectedId] || {};
+                              return {
+                                ...prev,
+                                [selectedId]: {
+                                  ...current,
+                                  letterSpacing: spacing,
+                                },
+                              };
+                            });
+                          }}
                         />
                         <input
                           type="text"
-                          value={textStyles.input1.letterSpacing}
-                          onChange={(e) =>
-                            setTextStyles((prev) => ({
-                              ...prev,
-                              input1: {
-                                ...prev.input1,
-                                letterSpacing: parseFloat(e.target.value) || 0,
-                              },
-                            }))
-                          }
+                          value={textStyles[selectedId]?.letterSpacing ?? 0}
+                          onChange={(e) => {
+                            const spacing = parseFloat(e.target.value) || 0;
+                            if (!selectedId) return;
+                            saveToHistory();
+                            setTextStyles((prev) => {
+                              const current = prev[selectedId] || {};
+                              return {
+                                ...prev,
+                                [selectedId]: {
+                                  ...current,
+                                  letterSpacing: spacing,
+                                },
+                              };
+                            });
+                          }}
                           className="common-value"
                         />
                       </div>
@@ -1401,15 +1455,18 @@ export default function Page() {
                           ))}
                         </div>
                       </div>
-
                     </div>
                     <div className="tab-pane " id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                       <input
                         type="color"
-                        value={textStyles.input1.canvasBackgroundColor}
-                        onChange={(e) => updateInput1Style("canvasBackgroundColor", e.target.value)}
-                        className="text-color-input"
+                        value={canvasBackgroundColor}
+                        onChange={(e) => {
+                          const color = e.target.value;
+                          setCanvasBackgroundColor(color);
+                        }}
                       />
+
+
                       <div className="image-upload">
                         <input
                           type="file"
@@ -1461,7 +1518,7 @@ export default function Page() {
                             </div>
                           );
                         })}
-    <div className="d-flex">
+                        <div className="d-flex">
                           <p>Shape rotate</p>
                           <input
                             type="range"
@@ -1502,7 +1559,7 @@ export default function Page() {
           </div>
         </section>
 
-      </main>
+      </main >
     </>
   );
 }

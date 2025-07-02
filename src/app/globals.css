@@ -504,3 +504,14 @@ border-radius: 8px;
   margin-top: 20px;
   cursor: pointer;
 }
+.template-container{
+  height: calc(100vh - 64px);
+  overflow: scroll;
+  padding: 0;
+  width: 100%;
+}
+
+
+.olul{
+padding-inline: 4rem;
+}

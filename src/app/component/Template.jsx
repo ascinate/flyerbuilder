@@ -1,57 +1,68 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 
-function Template() {
+function Template({ onSelectImage }) {
+
+    const [searchTerm, setSearchTerm] = useState('');
+
+
+
+    const templateImages = [
+        { src: '/bg-one.jpg', href: '/', alt: 'sky-photo' },
+        { src: '/bg-two.jpg', href: '/', alt: 'bg-bottol-photo' },
+        { src: '/tempone.webp', href: '/', alt: 'bg-woman-photo' },
+    ];
     return (
-        <>
-            <ul className='template-ul'>
-                <li className=''>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z"></path></svg>
-                    <input type="text" placeholder="search" className='template-search-input w-100' />
-                </li>
-                <li>
-                    <nav>
-                        <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                            <button className="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">All</button>
-                            <button className="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">categories</button>
-                        </div>
-                    </nav>
-                    <div className="tab-content" id="nav-tabContent">
-                        <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                            <div className='mx-auto'>
-                                <ul>
-                                    <li>
-                                        <Link href='/' className='template-image'>
-                                            <Image
-                                                src='/temptwo.webp'
-                                                width={200}
-                                                height={30}
-                                                alt='photo'
-                                                className='rounded'
-                                            />
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link href='/' className='template-image'>
-                                            <Image
-                                                src='/tempone.webp'
-                                                width={200}
-                                                height={30}
-                                                alt='photo'
-                                                className='rounded'
-                                            />
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
-                    </div>
-                </li>
-            </ul>
+        <ul className='template-ul'>
+            <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="..." /></svg>
+                <input
+                    type="text"
+                    placeholder="search"
+                    className="template-search-input w-100"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+                />
 
-        </>
-    )
+            </li>
+            <li>
+                <nav>
+                    <div className="nav nav-tabs" role="tablist">
+                        <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-home">All</button>
+                        <button className="nav-link" data-bs-toggle="tab" data-bs-target="#nav-profile">Categories</button>
+                    </div>
+                </nav>
+
+
+                <div className='mx-auto'>
+                    <ul className='olul'>
+                        {templateImages
+                            .filter((template) => template.alt.toLowerCase().includes(searchTerm))
+                            .map((template, index) => (
+                                <li key={index}>
+                                    <button
+                                        className="template-image border-0 bg-transparent p-0"
+                                        onClick={() => onSelectImage(template.src)}
+                                    >
+                                        <Image
+                                            src={template.src}
+                                            width={200}
+                                            height={30}
+                                            alt={template.alt}
+                                            className="rounded"
+                                        />
+                                    </button>
+                                </li>
+                            ))}
+                    </ul>
+
+                </div>
+
+
+
+            </li>
+        </ul >
+    );
 }
 export default Template
